@@ -51,20 +51,20 @@ Wiki definition: "A Table is a collection of related data held in a structured f
 
 You can think of a table as similar to an excel spreadsheet, where you have columns (vertically) and rows (horizontally):
 
-|  Name  | Breed | Age |
-| ------------- | ------------ || ------------- |
-| Rover | Labrador  | 3  |
-| Dennis  | Jack Russel  | 1  |
-| Daisy  | Golden Retriever  | 6  |
+|  Name         | Breed           | Age             |
+| ------------- | :------------:  | :-------------: |
+| Rover         | Labrador        | 3               |
+| Dennis        | Jack Russel     | 1               |
+| Daisy         | Golden Retrieve | 6               |
 
 #### Data Types
 Whenever you create a new column, MySQL requires that you specify what kind of data can be used to populate it (ie number / string etc...), to avid data inconsistencies such as:
 
-|  Name  | Breed | Age |
-| ------------- | ------------ || ------------- |
-| Rover | Labrador  | 3  |
-| Dennis  | Jack Russel  | one  |
-| Daisy  | Golden Retriever  | 6  |
+|  Name         | Breed             | Age      |
+| ------------- | :---------------: | :------: |
+| Rover         | Labrador          | 3        |
+| Dennis        | Jack Russel       | one      |
+| Daisy         | Golden Retriever  | 6        |
 
 There are [loads of different mysql datatypes](https://dev.mysql.com/doc/refman/8.0/en/data-types.html). (See below for how to declare them)
 
