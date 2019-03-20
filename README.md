@@ -74,20 +74,33 @@ There are [loads of different mysql datatypes](https://dev.mysql.com/doc/refman/
 CREATE TABLE tablename
   (
     column_name data_type,
-    column_name data_type,
-    column_name data_type,
-    etc...
+    column_name data_type
   );
 ```
 
 eg:
 
 ```
-CREATE TABLE dogs
+CREATE TABLE cats
   (
     name VARCHAR(100),
-    age INT,
-    breed VARCHAR(255),
-    etc...
+    age INT
   );
 ```
+
+Return all tables in current database:
+```SHOW TABLES;```
+
+Return slightly more detailed info about columns in the specified table in the current database:
+```SHOW COLUMNS FROM tablename;```
+
+A shorter-hand alternative to `SHOW COLUMNS` is
+
+```
+DESC tablename;
+```
+
+...which pretty much returns the same information.
+
+Permanently delete Table (be careful!):
+```DROP TABLE tablename;```
