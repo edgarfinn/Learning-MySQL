@@ -58,7 +58,7 @@ You can think of a table as similar to an excel spreadsheet, where you have colu
 | Daisy         | Golden Retrieve | 6               |
 
 #### Data Types
-Whenever you create a new column, MySQL requires that you specify what kind of data can be used to populate it (ie number / string etc...), to avid data inconsistencies such as:
+Whenever you create a new column, MySQL requires that you specify what kind of data can be used to populate it (ie number / string etc...), to avoid data inconsistencies such as:
 
 |  Name         | Breed             | Age      |
 | ------------- | :---------------: | :------: |
