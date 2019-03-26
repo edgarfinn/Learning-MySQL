@@ -71,7 +71,7 @@ There are [loads of different mysql datatypes](https://dev.mysql.com/doc/refman/
 
 ### Creating a table:
 
-```
+```sql
 CREATE TABLE tablename
   (
     column_name data_type,
@@ -81,7 +81,7 @@ CREATE TABLE tablename
 
 eg:
 
-```
+```sql
 CREATE TABLE cats
   (
     name VARCHAR(100),
@@ -93,22 +93,26 @@ Return all tables in current database:
 ```SHOW TABLES;```
 
 Return slightly more detailed info about columns in the specified table in the current database:
-```SHOW COLUMNS FROM tablename;```
+```sql
+SHOW COLUMNS FROM tablename;
+```
 
 A shorter-hand alternative to `SHOW COLUMNS` is
 
-```
+```sql
 DESC tablename;
 ```
 
 ...which pretty much returns the same information.
 
 Permanently delete Table (be careful!):
-```DROP TABLE tablename;```
+```sql
+DROP TABLE tablename;
+```
 
 ### Adding data to Tables (`INSERT`).
 
-```
+```sql
 INSERT INTO tablename
             ( column1Name,
               column2Name )
@@ -118,7 +122,8 @@ VALUES      ( value1,
 
 eg:
 
-```
+```sql
+
 INSERT INTO cats
             ( NAME,
               age )
@@ -128,7 +133,8 @@ VALUES      ( "Jetson",
 
 You can insert multiple rows of data in one command by chaining values in parens and separating them by commas:
 
-```
+```SQL
+
 INSERT INTO table_name
             (column_name, column_name)
 VALUES      (value, value),
@@ -180,3 +186,72 @@ MySQL will return the normal response, but mention that there's a warning too:
 ```
 
 NOTE: If you run another command after receiving the warning response then `SHOW WARNINGS` wont return anything. It only works on the most recently executed command.
+
+### Null in SQL
+
+```
+# cats table
+    +-------+-------------+------+-----+---------+-------+
+    | Field | Type        | Null | Key | Default | Extra |
+    +-------+-------------+------+-----+---------+-------+
+    | name  | varchar(50) | YES  |     | NULL    |       |
+    | age   | int(11)     | YES  |     | NULL    |       |
+    +-------+-------------+------+-----+---------+-------+
+```
+
+Null means undefined / unspecified. In the above table, the Null column is marked as `YES` because those rows are permitted to be empty. In other words you can INSERT into that table with incomplete data such as `INSERT INTO cats (name) VALUES ('sandy');` without any problems.
+
+SQL will just fill in the gap with `NULL`.
+
+```
+mysql> SELECT * FROM cats;
++-----------+------+
+| name      | age  |
++-----------+------+
+| Blue      |    1 |
+| peanut    |    2 |
+| Butter    |    4 |
+| Jelly     |    7 |
+| Boris     |    0 |
+| sandy     | NULL |
++-----------+------+
+
+mysql>
+```
+
+You can prevent columns from being null by specifying NOT NULL:
+
+```sql
+CREATE TABLE cats
+  (
+    name VARCHAR(100) NOT NULL,
+    age INT NOT NULL
+  )
+```
+
+Then if a column is left blank, SQL will try to fill it with the default value, and will return a warning whenever a default value is not provided:
+
+```sql
+mysql> CREATE TABLE cats2
+       (
+         name VARCHAR(100) NOT NULL,
+         age INT NOT NULL
+       );
+Query OK, 0 rows affected (0.04 sec)
+
+
+mysql> INSERT INTO cats2 (name) VALUES ('stinky');
+Query OK, 1 row affected, 1 warning (0.01 sec)
+
+mysql> SHOW WARNINGS;
++---------+------+------------------------------------------+
+| Level   | Code | Message                                  |
++---------+------+------------------------------------------+
+| Warning | 1364 | Field 'age' doesnt have a default value  |
++---------+------+------------------------------------------+
+
+
+mysql> SELECT * FROM cats2;
+```
+
+In the absence of a default value, SQL will use its own [implicit default value](https://dev.mysql.com/doc/refman/8.0/en/data-type-defaults.html#data-types-defaults-implicit) for that insert (for example with INT, MySQL will default to `0`, for VARCHAR(100), MySQL will default to `''`.)
