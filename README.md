@@ -13,6 +13,7 @@ Start the CLI:
 
 ```mysql-ctl cli;```
 
+### Creating a database.
 List available databases:
 
 ```show databases;```
@@ -104,3 +105,45 @@ DESC tablename;
 
 Permanently delete Table (be careful!):
 ```DROP TABLE tablename;```
+
+### Adding data to Tables (`INSERT`).
+
+```
+INSERT INTO tablename
+            ( column1Name,
+              column2Name )
+VALUES      ( value1,
+              value2 );
+```      
+
+eg:
+
+```
+INSERT INTO cats
+            ( NAME,
+              age )
+VALUES      ( "Jetson",
+              5 );
+```
+
+You can insert multiple rows of data in one command by chaining values in parens and separating them by commas:
+
+```
+INSERT INTO table_name
+            (column_name, column_name)
+VALUES      (value, value),
+            (value, value),
+            (value, value);
+```
+
+##### Escaping quotation marks in commands:
+
+Either:
+
+- Escape the quotes with a backslash:
+    - ``"This text has \"quotes\" in it"` or `'This text has \'quotes\' in it'``
+
+or
+
+- Alternate single and double quotes:
+    - `"This text has 'quotes' in it"` or `'This text has "quotes" in it'`
