@@ -141,9 +141,42 @@ VALUES      (value, value),
 Either:
 
 - Escape the quotes with a backslash:
-    - ``"This text has \"quotes\" in it"` or `'This text has \'quotes\' in it'``
+    - `"This text has \"quotes\" in it"` or `'This text has \'quotes\' in it'`
 
 or
 
 - Alternate single and double quotes:
     - `"This text has 'quotes' in it"` or `'This text has "quotes" in it'`
+
+
+### A note on warnings:
+```
+    +-------+-------------+------+-----+---------+-------+
+    | Field | Type        | Null | Key | Default | Extra |
+    +-------+-------------+------+-----+---------+-------+
+    | name  | varchar(50) | YES  |     | NULL    |       |
+    | age   | int(11)     | YES  |     | NULL    |       |
+    +-------+-------------+------+-----+---------+-------+
+```
+
+If an incorrect data type were inserted into the above table, for example 'seven' for an age:
+
+```INSERT INTO cats (name, age) VALUES ('Boris', 'seven');```
+
+MySQL will return the normal response, but mention that there's a warning too:
+
+`Query OK, 1 row affected, 1 warning (0.01 sec)`
+
+**Only** directly after receiving the warning response, you can ask for more information about the warning with:
+
+``` SHOW WARNINGS;```, which would return:
+
+```
++---------+------+------------------------------------------------------------+
+| Level   | Code | Message                                                    |
++---------+------+------------------------------------------------------------+
+| Warning | 1366 | Incorrect integer value: 'seven' for column 'age' at row 1 |
++---------+------+------------------------------------------------------------+
+```
+
+NOTE: If you run another command after receiving the warning response then `SHOW WARNINGS` wont return anything. It only works on the most recently executed command.
