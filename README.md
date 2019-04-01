@@ -204,7 +204,7 @@ Null means undefined / unspecified. In the above table, the Null column is marke
 SQL will just fill in the gap with `NULL`.
 
 ```
-mysql> SELECT * FROM cats;
+$> SELECT * FROM cats;
 +-----------+------+
 | name      | age  |
 +-----------+------+
@@ -216,7 +216,7 @@ mysql> SELECT * FROM cats;
 | sandy     | NULL |
 +-----------+------+
 
-mysql>
+$>
 ```
 
 You can prevent columns from being null by specifying NOT NULL:
@@ -232,7 +232,7 @@ CREATE TABLE cats
 Then if a column is left blank, SQL will try to fill it with the default value, and will return a warning whenever a default value is not provided:
 
 ```sql
-mysql> CREATE TABLE cats2
+$> CREATE TABLE cats2
        (
          name VARCHAR(100) NOT NULL,
          age INT NOT NULL
@@ -240,10 +240,10 @@ mysql> CREATE TABLE cats2
 Query OK, 0 rows affected (0.04 sec)
 
 
-mysql> INSERT INTO cats2 (name) VALUES ('stinky');
+$> INSERT INTO cats2 (name) VALUES ('stinky');
 Query OK, 1 row affected, 1 warning (0.01 sec)
 
-mysql> SHOW WARNINGS;
+$> SHOW WARNINGS;
 +---------+------+------------------------------------------+
 | Level   | Code | Message                                  |
 +---------+------+------------------------------------------+
@@ -251,7 +251,7 @@ mysql> SHOW WARNINGS;
 +---------+------+------------------------------------------+
 
 
-mysql> SELECT * FROM cats2;
+$> SELECT * FROM cats2;
 +--------+-----+
 | name   | age |
 +--------+-----+
@@ -289,7 +289,7 @@ INSERT INTO cats3 (name, age) VALUES (null, null);
 ...neither of the above insertions would return any errors, and they would both succesfully insert values into the table:
 
 ```sql
-mysql> SELECT * FROM cats3;
+$> SELECT * FROM cats3;
 +------------------+------+
 | name             | age  |
 +------------------+------+
@@ -304,16 +304,16 @@ There is a risk you might find yourself with null values in your code base, so i
 By contrast, if that table were created also using the `NOT NULL` constraint, it would return an error whenever NULL were passed in:
 
 ```sql
-mysql> CREATE TABLE cats4
+$> CREATE TABLE cats4
   (
     name VARCHAR(20) NOT NULL DEFAULT 'no name provided',
     age INT NOT NULL DEFAULT 99
   );
 
-mysql> INSERT INTO cats4() VALUES();
+$> INSERT INTO cats4() VALUES();
 Query OK, 1 row affected (0.01 sec)
 
-mysql> SELECT * FROM cats4;
+$> SELECT * FROM cats4;
 +------------------+-----+
 | name             | age |
 +------------------+-----+
@@ -321,9 +321,85 @@ mysql> SELECT * FROM cats4;
 +------------------+-----+
 1 row in set (0.00 sec)
 
-mysql> INSERT INTO cats4 (name, age) VALES (null, null);
+$> INSERT INTO cats4 (name, age) VALES (null, null);
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'VALES (null, null)' at line 1
 
 ```
 
 ### Primary Keys
+A primary key is a column in a table that is used as a unique identifier (meaning no two values in that column can be the same).
+
+##### Setting a primary key:
+
+```sql
+$> CREATE TABLE unique_cats
+  (
+    cat_id INT NOT NULL,
+    name VARCHAR(100),
+    age INT,
+    PRIMARY KEY (cat_id)
+  );
+```
+
+```sql
+$> DESC unique_cats;
+
++--------+--------------+------+-----+---------+-------+
+| Field  | Type         | Null | Key | Default | Extra |
++--------+--------------+------+-----+---------+-------+
+| cat_id | int(11)      | NO   | PRI | NULL    |       |
+| name   | varchar(100) | YES  |     | NULL    |       |
+| age    | int(11)      | YES  |     | NULL    |       |
++--------+--------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+```
+
+Notice the key column now tells you that the `cat_id` field is the primary key (`PRI`).
+
+This table will not accept any two entries where the `cat_id` hold the same value, because they must be unique.
+
+```sql
+$> INSERT INTO unique_cats(cat_id, name, age) VALUES (1, 'sid', 3);                                                                  
+Query OK, 1 row affected (0.01 sec)
+
+$> INSERT INTO unique_cats(cat_id, name, age) VALUES (1, 'dave', 2);                                                                
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+$>
+```
+because the cat_id are the same in both inserts, the second insert has returned an error, and not executed.
+
+##### Auto-incrementing:
+
+You can use `AUTO_INCREMENT` to automatically fill ascending `INT` values for primary keys:
+
+```sql
+$> CREATE TABLE unique_cats2
+    ->   (
+    ->     cat_id INT NOT NULL AUTO_INCREMENT,
+    ->     name VARCHAR(100),
+    ->     age INT,
+    ->     PRIMARY KEY (cat_id)
+    ->   );
+Query OK, 0 rows affected (0.00 sec)
+
+$> INSERT INTO unique_cats2(name, age) VALUES('skippy', 4);
+Query OK, 1 row affected (0.01 sec)
+
+$> INSERT INTO unique_cats2(name, age) VALUES('bravo', 3);                                                                          
+Query OK, 1 row affected (0.01 sec)
+
+$> INSERT INTO unique_cats2(name, age) VALUES('barbara', 10);                                                                       
+Query OK, 1 row affected (0.01 sec)
+
+$> SELECT * FROM unique_cats2;
++--------+---------+------+
+| cat_id | name    | age  |
++--------+---------+------+
+|      1 | skippy  |    4 |
+|      2 | bravo   |    3 |
+|      3 | barbara |   10 |
++--------+---------+------+
+3 rows in set (0.00 sec)
+```
+
+Above you can see how the table has automatically added ascending numbers in the cat_id field for each insertion.
