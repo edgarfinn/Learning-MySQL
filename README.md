@@ -252,6 +252,78 @@ mysql> SHOW WARNINGS;
 
 
 mysql> SELECT * FROM cats2;
++--------+-----+
+| name   | age |
++--------+-----+
+| stinky |   0 |
++--------+-----+
+1 row in set (0.00 sec)
 ```
 
 In the absence of a default value, SQL will use its own [implicit default value](https://dev.mysql.com/doc/refman/8.0/en/data-type-defaults.html#data-types-defaults-implicit) for that insert (for example with INT, MySQL will default to `0`, for VARCHAR(100), MySQL will default to `''`.)
+
+### Setting default values
+
+You can set the default values for a table using the `DEFAULT` keyword:
+
+```sql
+
+CREATE TABLE cats3
+  (
+    name VARCHAR(20) DEFAULT 'no name provided',
+    age INT DEFAULT 99
+  );
+```
+
+Now whenever no value is provided for `name`, the table will default to `'no name provided'`, and when no age is provided, it will default to `99`.
+
+Be carefull using DEFAULT without the NOT NULL constraint, because although it will default in the *absence* of a value being passed in, it *could* still take `null` as an explicitly passed value.
+
+eg:
+
+```sql
+INSERT INTO cats3() VALUES();
+INSERT INTO cats3 (name, age) VALUES (null, null);
+```
+
+...neither of the above insertions would return any errors, and they would both succesfully insert values into the table:
+
+```sql
+mysql> SELECT * FROM cats3;
++------------------+------+
+| name             | age  |
++------------------+------+
+| no name provided |   99 |
+| NULL             | NULL |
++------------------+------+
+2 rows in set (0.00 sec)
+```
+
+There is a risk you might find yourself with null values in your code base, so its important to safeguard against them being unintentionally inserted. If you dont want null values, use NOT NULL!
+
+By contrast, if that table were created also using the `NOT NULL` constraint, it would return an error whenever NULL were passed in:
+
+```sql
+mysql> CREATE TABLE cats4
+  (
+    name VARCHAR(20) NOT NULL DEFAULT 'no name provided',
+    age INT NOT NULL DEFAULT 99
+  );
+
+mysql> INSERT INTO cats4() VALUES();
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM cats4;
++------------------+-----+
+| name             | age |
++------------------+-----+
+| no name provided |  99 |
++------------------+-----+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO cats4 (name, age) VALES (null, null);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'VALES (null, null)' at line 1
+
+```
+
+### Primary Keys
