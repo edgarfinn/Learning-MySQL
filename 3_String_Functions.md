@@ -190,7 +190,7 @@ SELECT SUBSTRING(title, -8) FROM books;
 -- +----------------------+
 ```
 
-### Combining `SUBSTRING` and `CONCAT`:
+#### Combining string functions:
 
 Its possible to combine functions. When functions are combined, the inner-most function is evaluated first, and passed to its parent back up to the outer-most function.
 
@@ -228,6 +228,8 @@ SELECT CONCAT ( SUBSTRING(title, 1, 10), '...' ) AS subtitle FROM books;
 ### REPLACE
 
 `REPLACE(string | columnName, search_for, replace_with)`
+
+NOTE: REPLACE is case sensitive
 
 Example:
 ```SQL
