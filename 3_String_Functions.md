@@ -108,3 +108,84 @@ SELECT CONCAT_WS(' - ', title, author_fname, author_lname) FROM books;
 -- | Consider the Lobster - David - Foster Wallace                          |
 -- +------------------------------------------------------------------------+
 ```
+
+### SUBSTRING
+Returns part of a string. Which part depends on the arguments passed in:
+
+- `SELECT SUBSTRING(column_name, startIndex, endIndex) FROM table_name;`
+  - returns characters from `column_name` between `startIndex` and `endIndex`.
+
+OR
+
+- `SELECT SUBSTRING(column_name, startIndex) FROM table_name;`
+  - returns characters from `column_name` between `startIndex` the end of the full string.
+
+If only `startIndex` is passed (not `endIndex`), and `startIndex` is a negative number, the characters selected are counted from the end of the string.
+
+```SQL
+SELECT SUBSTRING(title, 1,8) FROM books;
+-- +-----------------------+
+-- | SUBSTRING(title, 1,8) |
+-- +-----------------------+
+-- | The Name              |
+-- | Norse My              |
+-- | American              |
+-- | Interpre              |
+-- | A Hologr              |
+-- | The Circ              |
+-- | The Amaz              |
+-- | Just Kid              |
+-- | A Heartb              |
+-- | Coraline              |
+-- | What We               |
+-- | Where Im              |
+-- | White No              |
+-- | Cannery               |
+-- | Oblivion              |
+-- | Consider              |
+-- +-----------------------+
+
+SELECT SUBSTRING(title, 8) FROM books;
+-- +----------------------------------------------+
+-- | SUBSTRING(title, 8)                          |
+-- +----------------------------------------------+
+-- | esake                                        |
+-- | ythology                                     |
+-- | n Gods                                       |
+-- | eter of Maladies                             |
+-- | ram for the King: A Novel                    |
+-- | cle                                          |
+-- | zing Adventures of Kavalier & Clay           |
+-- | ds                                           |
+-- | breaking Work of Staggering Genius           |
+-- | e                                            |
+-- |  Talk About When We Talk About Love: Stories |
+-- | Im Calling From: Selected Stories            |
+-- | oise                                         |
+-- |  Row                                         |
+-- | n: Stories                                   |
+-- | r the Lobster                                |
+-- +----------------------------------------------+
+
+SELECT SUBSTRING(title, -8) FROM books;
+-- +----------------------+
+-- | SUBSTRING(title, -8) |
+-- +----------------------+
+-- | Namesake             |
+-- | ythology             |
+-- | can Gods             |
+-- | Maladies             |
+-- |  A Novel             |
+-- | e Circle             |
+-- | r & Clay             |
+-- | ust Kids             |
+-- | g Genius             |
+-- | Coraline             |
+-- |  Stories             |
+-- |  Stories             |
+-- | te Noise             |
+-- | nery Row             |
+-- |  Stories             |
+-- |  Lobster             |
+-- +----------------------+
+```
