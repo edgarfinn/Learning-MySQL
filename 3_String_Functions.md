@@ -227,7 +227,9 @@ SELECT CONCAT ( SUBSTRING(title, 1, 10), '...' ) AS subtitle FROM books;
 
 ### REPLACE
 
-`REPLACE(string | columnName, search_for, replace_with)`
+`REPLACE(string | columnName, search, replace)`
+
+Replaces all incidences of `search` in `string` or `column_name` with `replace`.
 
 NOTE: REPLACE is case sensitive
 
@@ -261,4 +263,35 @@ SELECT REPLACE(title, 'The', 'Das') FROM books;
 -- | Oblivion: Stories                                   |
 -- | Consider the Lobster                                |
 -- +-----------------------------------------------------+
+
+SELECT
+  SUBSTRING (
+    REPLACE(title, 'e', '3'),
+    1,
+    5
+  )
+AS 'short titles'
+FROM books;
+
+-- +--------------+
+-- | short titles |
+-- +--------------+
+-- | Th3 N        |
+-- | Nors3        |
+-- | Am3ri        |
+-- | Int3r        |
+-- | A Hol        |
+-- | Th3 C        |
+-- | Th3 A        |
+-- | Just         |
+-- | A H3a        |
+-- | Coral        |
+-- | What         |
+-- | Wh3r3        |
+-- | Whit3        |
+-- | Cann3        |
+-- | Obliv        |
+-- | Consi        |
+-- +--------------+
+
 ```
