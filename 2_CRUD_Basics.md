@@ -33,7 +33,7 @@ SELECT cat_id, name, age, breed FROM cats;
 ### Specify conditions for queries with the `WHERE` keyword:
 
 The WHERE keyword can be used to specify particular conditions for the data you want to target.
-Its not unique to READing, it can also be used for updating, deleting etc... too)
+Its not unique to READing, it can also be used for updating, deleting etc... too.
 
 Select by age or name:
 
