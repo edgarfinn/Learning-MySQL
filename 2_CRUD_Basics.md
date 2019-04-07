@@ -77,3 +77,133 @@ For example:
 `UPDATE cats SET breed='Shorthair' WHERE breed='Tabby';`
 
 BE CAREFUL, there's no undo button, so its good practise to `SELECT` the data you want to update first, before then running an `UPDATE` on it.
+
+```SQL
+$> SELECT * FROM cats WHERE name='Jackson';
+-- +--------+---------+--------+------+
+-- | cat_id | name    | breed  | age  |
+-- +--------+---------+--------+------+
+-- |      7 | Jackson | Sphynx |    7 |
+-- +--------+---------+--------+------+
+
+$> UPDATE cats SET name='Jack' WHERE name='Jackson';
+-- Query OK, 1 row affected (0.01 sec)
+-- Rows matched: 1  Changed: 1  Warnings: 0
+
+$> SELECT * FROM cats WHERE name='Jackson';
+-- Empty set (0.00 sec)
+
+$> SELECT * FROM cats WHERE name='Jack';
+-- +--------+------+--------+------+
+-- | cat_id | name | breed  | age  |
+-- +--------+------+--------+------+
+-- |      7 | Jack | Sphynx |    7 |
+-- +--------+------+--------+------+
+-- 1 row in set (0.01 sec)
+
+$> SELECT * FROM cats WHERE name='Ringo';
+-- +--------+-------+-------+------+
+-- | cat_id | name  | breed | age  |
+-- +--------+-------+-------+------+
+-- |      1 | Ringo | Tabby |    4 |
+-- +--------+-------+-------+------+
+-- 1 row in set (0.00 sec)
+
+$> UPDATE cats SET breed='Shorthair' WHERE name='Ringo';
+-- Query OK, 1 row affected (0.01 sec)
+-- Rows matched: 1  Changed: 1  Warnings: 0
+
+$> SELECT * FROM cats WHERE name='Ringo';
+-- +--------+-------+-----------+------+
+-- | cat_id | name  | breed     | age  |
+-- +--------+-------+-----------+------+
+-- |      1 | Ringo | Shorthair |    4 |
+-- +--------+-------+-----------+------+
+-- 1 row in set (0.00 sec)
+
+$> SELECT * FROM cats WHERE breed='Maine Coon';
+-- +--------+------------+------------+------+
+-- | cat_id | name       | breed      | age  |
+-- +--------+------------+------------+------+
+-- |      2 | Cindy      | Maine Coon |   10 |
+-- |      3 | Dumbledore | Maine Coon |   11 |
+-- +--------+------------+------------+------+
+-- 2 rows in set (0.00 sec)
+
+$> UPDATE cats SET age=12 WHERE breed='Maine Coon';
+-- Query OK, 2 rows affected (0.01 sec)
+-- Rows matched: 2  Changed: 2  Warnings: 0
+
+SELECT * FROM cats WHERE breed='Maine Coon';
+-- +--------+------------+------------+------+
+-- | cat_id | name       | breed      | age  |
+-- +--------+------------+------------+------+
+-- |      2 | Cindy      | Maine Coon |   12 |
+-- |      3 | Dumbledore | Maine Coon |   12 |
+-- +--------+------------+------------+------+
+```
+
+
+## DELETE
+
+DELETE entries in a table using the `DELETE` keyword. As with UPDATE, make sure you SELECT the data first to ensure you're targeting the right entries.
+
+Syntax:
+
+`DELETE FROM table_name WHERE [some condition];`
+
+For example:
+
+```sql
+SELECT * FROM cats;
+-- +--------+----------------+------------+------+
+-- | cat_id | name           | breed      | age  |
+-- +--------+----------------+------------+------+
+-- |      1 | Ringo          | Shorthair  |    4 |
+-- |      2 | Cindy          | Maine Coon |   12 |
+-- |      3 | Dumbledore     | Maine Coon |   12 |
+-- |      4 | Egg            | Persian    |    4 |
+-- |      5 | Misty          | Tabby      |   13 |
+-- |      6 | George Michael | Ragdoll    |    9 |
+-- |      7 | Jack           | Sphynx     |    7 |
+-- +--------+----------------+------------+------+
+
+SELECT * FROM cats WHERE name='egg';
+-- +--------+------+---------+------+
+-- | cat_id | name | breed   | age  |
+-- +--------+------+---------+------+
+-- |      4 | Egg  | Persian |    4 |
+-- +--------+------+---------+------+
+
+DELETE FROM cats WHERE name='egg';
+-- Query OK, 1 row affected (0.01 sec)
+
+SELECT * FROM cats WHERE name='egg';                                                                    
+-- Empty set (0.00 sec)
+
+SELECT * FROM cats;
+-- +--------+----------------+------------+------+
+-- | cat_id | name           | breed      | age  |
+-- +--------+----------------+------------+------+
+-- |      1 | Ringo          | Shorthair  |    4 |
+-- |      2 | Cindy          | Maine Coon |   12 |
+-- |      3 | Dumbledore     | Maine Coon |   12 |
+-- |      5 | Misty          | Tabby      |   13 |
+-- |      6 | George Michael | Ragdoll    |    9 |
+-- |      7 | Jack           | Sphynx     |    7 |
+-- +--------+----------------+------------+------+
+```
+
+*IMPORTANT:* Notice how the auto-incremented cat_id column behaves when a line is deleted. All cat_ids remain the same as before, there just becomes a gap in the numbers.
+
+BE CAREFUL, if you don't use a `WHERE` condition, you may delete all entries in the table!
+
+`DELETE FROM cats;` will delete **all** entries into `cats`.
+
+```sql
+$> DELETE FROM cats;
+Query OK, 4 rows affected (0.00 sec)
+
+$> SELECT * FROM cats;                                                                                     
+Empty set (0.00 sec)
+```
