@@ -189,3 +189,74 @@ SELECT SUBSTRING(title, -8) FROM books;
 -- |  Lobster             |
 -- +----------------------+
 ```
+
+### Combining `SUBSTRING` and `CONCAT`:
+
+Its possible to combine functions. When functions are combined, the inner-most function is evaluated first, and passed to its parent back up to the outer-most function.
+
+```SQL
+SELECT CONCAT ( SUBSTRING('Hello World', 1, 7 ), '...') AS my_output;
+-- +------------+
+-- | my_output  |
+-- +------------+
+-- | Hello W... |
+-- +------------+
+
+SELECT CONCAT ( SUBSTRING(title, 1, 10), '...' ) AS subtitle FROM books;
+-- +---------------+
+-- | subtitle      |
+-- +---------------+
+-- | The Namesa... |
+-- | Norse Myth... |
+-- | American G... |
+-- | Interprete... |
+-- | A Hologram... |
+-- | The Circle... |
+-- | The Amazin... |
+-- | Just Kids...  |
+-- | A Heartbre... |
+-- | Coraline...   |
+-- | What We Ta... |
+-- | Where Im  ... |
+-- | White Nois... |
+-- | Cannery Ro... |
+-- | Oblivion: ... |
+-- | Consider t... |
+-- +---------------+
+```
+
+### REPLACE
+
+`REPLACE(string | columnName, search_for, replace_with)`
+
+Example:
+```SQL
+SELECT REPLACE('Hello world', 'world', 'universe');
+-- +---------------------------------------------+
+-- | REPLACE('Hello world', 'world', 'universe') |
+-- +---------------------------------------------+
+-- | Hello universe                              |
+-- +---------------------------------------------+
+
+SELECT REPLACE(title, 'The', 'Das') FROM books;
+-- +-----------------------------------------------------+
+-- | REPLACE(title, 'The', 'Das')                        |
+-- +-----------------------------------------------------+
+-- | Das Namesake                                        |
+-- | Norse Mythology                                     |
+-- | American Gods                                       |
+-- | Interpreter of Maladies                             |
+-- | A Hologram for the King: A Novel                    |
+-- | Das Circle                                          |
+-- | Das Amazing Adventures of Kavalier & Clay           |
+-- | Just Kids                                           |
+-- | A Heartbreaking Work of Staggering Genius           |
+-- | Coraline                                            |
+-- | What We Talk About When We Talk About Love: Stories |
+-- | Where Im Calling From: Selected Stories             |
+-- | White Noise                                         |
+-- | Cannery Row                                         |
+-- | Oblivion: Stories                                   |
+-- | Consider the Lobster                                |
+-- +-----------------------------------------------------+
+```
