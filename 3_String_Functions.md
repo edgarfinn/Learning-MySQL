@@ -20,8 +20,8 @@ Concatenates several string values together.
 
 Syntax:
 ```SQL
-CONCAT(x,y,z)
-SELECT CONCAT(column_name, ' ', another_column_name) FROM table;
+CONCAT(x, y, z);
+SELECT CONCAT(column_name, ' ', another_column_name) FROM table_name;
 
 SELECT CONCAT(author_fname, ' ', author_lname) FROM books;
 -- +-----------------------------------------+
@@ -48,7 +48,63 @@ SELECT CONCAT(author_fname, ' ', author_lname) FROM books;
 ```
 Notice that the header isnt particularly user-friendly
 ```SQL
-+-----------------------------------------+
-| CONCAT(author_fname, ' ', author_lname) |
-+-----------------------------------------+
+-- +-----------------------------------------+
+-- | CONCAT(author_fname, ' ', author_lname) |
+-- +-----------------------------------------+
+```
+
+The header can be customised again using the `AS` keyword:
+
+```SQL
+SELECT CONCAT(author_fname, ' ', author_lname) AS 'full name' FROM books;                               
+-- +----------------------+
+-- | full name            |
+-- +----------------------+
+-- | Jhumpa Lahiri        |
+-- | Neil Gaiman          |
+-- | Neil Gaiman          |
+-- | Jhumpa Lahiri        |
+-- | Dave Eggers          |
+-- | Dave Eggers          |
+-- | Michael Chabon       |
+-- | Patti Smith          |
+-- | Dave Eggers          |
+-- | Neil Gaiman          |
+-- | Raymond Carver       |
+-- | Raymond Carver       |
+-- | Don DeLillo          |
+-- | John Steinbeck       |
+-- | David Foster Wallace |
+-- | David Foster Wallace |
+-- +----------------------+
+```
+
+CONCAT_WS (concatenate with separator)
+
+Syntax:
+```SQL
+CONCAT(separator, X, Y, Z);
+-- XseparatorYseparatorZ
+
+SELECT CONCAT_WS(' - ', title, author_fname, author_lname) FROM books;
+-- +------------------------------------------------------------------------+
+-- | CONCAT_WS(' - ', title, author_fname, author_lname)                    |
+-- +------------------------------------------------------------------------+
+-- | The Namesake - Jhumpa - Lahiri                                         |
+-- | Norse Mythology - Neil - Gaiman                                        |
+-- | American Gods - Neil - Gaiman                                          |
+-- | Interpreter of Maladies - Jhumpa - Lahiri                              |
+-- | A Hologram for the King: A Novel - Dave - Eggers                       |
+-- | The Circle - Dave - Eggers                                             |
+-- | The Amazing Adventures of Kavalier & Clay - Michael - Chabon           |
+-- | Just Kids - Patti - Smith                                              |
+-- | A Heartbreaking Work of Staggering Genius - Dave - Eggers              |
+-- | Coraline - Neil - Gaiman                                               |
+-- | What We Talk About When We Talk About Love: Stories - Raymond - Carver |
+-- | Where Im Calling From: Selected Stories - Raymond - Carver             |
+-- | White Noise - Don - DeLillo                                            |
+-- | Cannery Row - John - Steinbeck                                         |
+-- | Oblivion: Stories - David - Foster Wallace                             |
+-- | Consider the Lobster - David - Foster Wallace                          |
+-- +------------------------------------------------------------------------+
 ```
