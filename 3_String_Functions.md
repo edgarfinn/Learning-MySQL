@@ -373,3 +373,82 @@ FROM
 -- | Foster Wallaceis  14 characters long |
 -- +--------------------------------------+
 ```
+
+### UPPER and LOWER
+
+Converts strings to upper and lower case.
+
+```SQL
+SELECT UPPER('hello world');
+-- +----------------------+
+-- | UPPER('hello world') |
+-- +----------------------+
+-- | HELLO WORLD          |
+-- +----------------------+
+
+SELECT UPPER(author_fname) FROM books;
+-- +---------------------+
+-- | UPPER(author_fname) |
+-- +---------------------+
+-- | JHUMPA              |
+-- | NEIL                |
+-- | NEIL                |
+-- | JHUMPA              |
+-- | DAVE                |
+-- | DAVE                |
+-- | MICHAEL             |
+-- | PATTI               |
+-- | DAVE                |
+-- | NEIL                |
+-- | RAYMOND             |
+-- | RAYMOND             |
+-- | DON                 |
+-- | JOHN                |
+-- | DAVID               |
+-- | DAVID               |
+-- +---------------------+
+
+SELECT LOWER(author_lname) FROM books;                                                                  
+-- +---------------------+
+-- | LOWER(author_lname) |
+-- +---------------------+
+-- | lahiri              |
+-- | gaiman              |
+-- | gaiman              |
+-- | lahiri              |
+-- | eggers              |
+-- | eggers              |
+-- | chabon              |
+-- | smith               |
+-- | eggers              |
+-- | gaiman              |
+-- | carver              |
+-- | carver              |
+-- | delillo             |
+-- | steinbeck           |
+-- | foster wallace      |
+-- | foster wallace      |
+-- +---------------------+
+
+SELECT CONCAT(UPPER(author_lname), ', ', LOWER(author_fname)) FROM books;                               
+-- +--------------------------------------------------------+
+-- | CONCAT(UPPER(author_lname), ', ', LOWER(author_fname)) |
+-- +--------------------------------------------------------+
+-- | LAHIRI, jhumpa                                         |
+-- | GAIMAN, neil                                           |
+-- | GAIMAN, neil                                           |
+-- | LAHIRI, jhumpa                                         |
+-- | EGGERS, dave                                           |
+-- | EGGERS, dave                                           |
+-- | CHABON, michael                                        |
+-- | SMITH, patti                                           |
+-- | EGGERS, dave                                           |
+-- | GAIMAN, neil                                           |
+-- | CARVER, raymond                                        |
+-- | CARVER, raymond                                        |
+-- | DELILLO, don                                           |
+-- | STEINBECK, john                                        |
+-- | FOSTER WALLACE, david                                  |
+-- | FOSTER WALLACE, david                                  |
+-- +--------------------------------------------------------+
+```
