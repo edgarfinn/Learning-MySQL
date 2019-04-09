@@ -151,10 +151,16 @@ Notice there are now 12 results, as there are 12 distinct authors, even though t
 
 Orders results by the specified value (ie column_name)
 
+NB: Works equally for letters and nummbers
+
 Syntax:
 `SELECT column_name[s] FROM table_name ORDER BY column_name;`
+`SELECT column_name[s] FROM table_name ORDER BY column_name DESC;`
+`SELECT column_name[s] FROM table_name ORDER BY column_name ASC;`
 
-NB: Works equally for letters and nummbers
+The `ORDER BY` column doesnt have to be present in the query:
+
+`SELECT column_a FROM table_name ORDER BY column_b`;
 
 ```SQL
 SELECT title FROM books;
@@ -231,4 +237,84 @@ SELECT title FROM books ORDER BY title DESC;
 -- | A Heartbreaking Work of Staggering Genius           |
 -- | 10% Happier                                         |
 -- +-----------------------------------------------------+
+
+SELECT title FROM books ORDER BY author_lname;
+-- +-----------------------------------------------------+
+-- | title                                               |
+-- +-----------------------------------------------------+
+-- | Where Im Calling From: Selected Stories             |
+-- | What We Talk About When We Talk About Love: Stories |
+-- | The Amazing Adventures of Kavalier & Clay           |
+-- | White Noise                                         |
+-- | A Hologram for the King: A Novel                    |
+-- | The Circle                                          |
+-- | A Heartbreaking Work of Staggering Genius           |
+-- | Oblivion: Stories                                   |
+-- | Consider the Lobster                                |
+-- | Coraline                                            |
+-- | American Gods                                       |
+-- | Norse Mythology                                     |
+-- | fake_book                                           |
+-- | 10% Happier                                         |
+-- | The Namesake                                        |
+-- | Interpreter of Maladies                             |
+-- | Lincoln In The Bardo                                |
+-- | Just Kids                                           |
+-- | Cannery Row                                         |
+-- +-----------------------------------------------------+
+-- 19 rows in set (0.00 sec)
+```
+
+You can also specify which `SELECT`ed column you want to `ODRER BY`, by specifying the column's index in the `SELECT`ion:
+
+```SQL
+SELECT title, released_year, pages FROM books ORDER BY 2;
+-- +-----------------------------------------------------+---------------+-------+
+-- | title                                               | released_year | pages |
+-- +-----------------------------------------------------+---------------+-------+
+-- | Cannery Row                                         |          1945 |   181 |
+-- | What We Talk About When We Talk About Love: Stories |          1981 |   176 |
+-- | White Noise                                         |          1985 |   320 |
+-- | Where Im Calling From: Selected Stories             |          1989 |   526 |
+-- | Interpreter of Maladies                             |          1996 |   198 |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 |   634 |
+-- | American Gods                                       |          2001 |   465 |
+-- | fake_book                                           |          2001 |   428 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |   437 |
+-- | The Namesake                                        |          2003 |   291 |
+-- | Coraline                                            |          2003 |   208 |
+-- | Oblivion: Stories                                   |          2004 |   329 |
+-- | Consider the Lobster                                |          2005 |   343 |
+-- | Just Kids                                           |          2010 |   304 |
+-- | A Hologram for the King: A Novel                    |          2012 |   352 |
+-- | The Circle                                          |          2013 |   504 |
+-- | 10% Happier                                         |          2014 |   256 |
+-- | Norse Mythology                                     |          2016 |   304 |
+-- | Lincoln In The Bardo                                |          2017 |   367 |
+-- +-----------------------------------------------------+---------------+-------+
+
+SELECT title, released_year, pages FROM books ORDER BY 3;
+-- +-----------------------------------------------------+---------------+-------+
+-- | title                                               | released_year | pages |
+-- +-----------------------------------------------------+---------------+-------+
+-- | What We Talk About When We Talk About Love: Stories |          1981 |   176 |
+-- | Cannery Row                                         |          1945 |   181 |
+-- | Interpreter of Maladies                             |          1996 |   198 |
+-- | Coraline                                            |          2003 |   208 |
+-- | 10% Happier                                         |          2014 |   256 |
+-- | The Namesake                                        |          2003 |   291 |
+-- | Just Kids                                           |          2010 |   304 |
+-- | Norse Mythology                                     |          2016 |   304 |
+-- | White Noise                                         |          1985 |   320 |
+-- | Oblivion: Stories                                   |          2004 |   329 |
+-- | Consider the Lobster                                |          2005 |   343 |
+-- | A Hologram for the King: A Novel                    |          2012 |   352 |
+-- | Lincoln In The Bardo                                |          2017 |   367 |
+-- | fake_book                                           |          2001 |   428 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |   437 |
+-- | American Gods                                       |          2001 |   465 |
+-- | The Circle                                          |          2013 |   504 |
+-- | Where Im Calling From: Selected Stories             |          1989 |   526 |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 |   634 |
+-- +-----------------------------------------------------+---------------+-------+
 ```
