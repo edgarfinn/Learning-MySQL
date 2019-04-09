@@ -318,3 +318,32 @@ SELECT title, released_year, pages FROM books ORDER BY 3;
 -- | The Amazing Adventures of Kavalier & Clay           |          2000 |   634 |
 -- +-----------------------------------------------------+---------------+-------+
 ```
+
+You can also `ORDER BY` multiple columns:
+
+```SQL
+SELECT title, released_year, pages FROM books ORDER BY released_year, pages;
+-- +-----------------------------------------------------+---------------+-------+
+-- | title                                               | released_year | pages |
+-- +-----------------------------------------------------+---------------+-------+
+-- | Cannery Row                                         |          1945 |   181 |
+-- | What We Talk About When We Talk About Love: Stories |          1981 |   176 |
+-- | White Noise                                         |          1985 |   320 |
+-- | Where Im Calling From: Selected Stories             |          1989 |   526 |
+-- | Interpreter of Maladies                             |          1996 |   198 |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 |   634 |
+-- | fake_book                                           |          2001 |   428 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |   437 |
+-- | American Gods                                       |          2001 |   465 |
+-- | Coraline                                            |          2003 |   208 |
+-- | The Namesake                                        |          2003 |   291 |
+-- | Oblivion: Stories                                   |          2004 |   329 |
+-- | Consider the Lobster                                |          2005 |   343 |
+-- | Just Kids                                           |          2010 |   304 |
+-- | A Hologram for the King: A Novel                    |          2012 |   352 |
+-- | The Circle                                          |          2013 |   504 |
+-- | 10% Happier                                         |          2014 |   256 |
+-- | Norse Mythology                                     |          2016 |   304 |
+-- | Lincoln In The Bardo                                |          2017 |   367 |
+-- +-----------------------------------------------------+---------------+-------+
+```
