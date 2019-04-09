@@ -293,5 +293,7 @@ FROM books;
 -- | Obliv        |
 -- | Consi        |
 -- +--------------+
-
 ```
+
+### REVERSE
+Reverses the `selected` string.
