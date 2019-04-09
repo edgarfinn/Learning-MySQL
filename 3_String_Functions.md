@@ -297,3 +297,79 @@ FROM books;
 
 ### REVERSE
 Reverses the `selected` string.
+
+```SQL
+mysql> SELECT REVERSE(title) FROM books;
+-- +-----------------------------------------------------+
+-- | REVERSE(title)                                      |
+-- +-----------------------------------------------------+
+-- | ekasemaN ehT                                        |
+-- | ygolohtyM esroN                                     |
+-- | sdoG naciremA                                       |
+-- | seidalaM fo reterpretnI                             |
+-- | levoN A :gniK eht rof margoloH A                    |
+-- | elcriC ehT                                          |
+-- | yalC & reilavaK fo serutnevdA gnizamA ehT           |
+-- | sdiK tsuJ                                           |
+-- | suineG gnireggatS fo kroW gnikaerbtraeH A           |
+-- | enilaroC                                            |
+-- | seirotS :evoL tuobA klaT eW nehW tuobA klaT eW tahW |
+-- | seirotS detceleS :morF gnillaC mI erehW             |
+-- | esioN etihW                                         |
+-- | woR yrennaC                                         |
+-- | seirotS :noivilbO                                   |
+-- | retsboL eht redisnoC                                |
+-- +-----------------------------------------------------+
+```
+
+### CHAR_LENGTH
+
+Counts characters in a string.
+```sql
+SELECT author_lname, CHAR_LENGTH(author_lname) AS 'Length' FROM books;
+-- +----------------+--------+
+-- | author_lname   | Length |
+-- +----------------+--------+
+-- | Lahiri         |      6 |
+-- | Gaiman         |      6 |
+-- | Gaiman         |      6 |
+-- | Lahiri         |      6 |
+-- | Eggers         |      6 |
+-- | Eggers         |      6 |
+-- | Chabon         |      6 |
+-- | Smith          |      5 |
+-- | Eggers         |      6 |
+-- | Gaiman         |      6 |
+-- | Carver         |      6 |
+-- | Carver         |      6 |
+-- | DeLillo        |      7 |
+-- | Steinbeck      |      9 |
+-- | Foster Wallace |     14 |
+-- | Foster Wallace |     14 |
+-- +----------------+--------+
+
+SELECT
+  CONCAT (author_lname, 'is  ', CHAR_LENGTH(author_lname), ' characters long') AS 'length description'
+FROM
+  books;
+-- +--------------------------------------+
+-- | length description                   |
+-- +--------------------------------------+
+-- | Lahiriis  6 characters long          |
+-- | Gaimanis  6 characters long          |
+-- | Gaimanis  6 characters long          |
+-- | Lahiriis  6 characters long          |
+-- | Eggersis  6 characters long          |
+-- | Eggersis  6 characters long          |
+-- | Chabonis  6 characters long          |
+-- | Smithis  5 characters long           |
+-- | Eggersis  6 characters long          |
+-- | Gaimanis  6 characters long          |
+-- | Carveris  6 characters long          |
+-- | Carveris  6 characters long          |
+-- | DeLillois  7 characters long         |
+-- | Steinbeckis  9 characters long       |
+-- | Foster Wallaceis  14 characters long |
+-- | Foster Wallaceis  14 characters long |
+-- +--------------------------------------+
+```
