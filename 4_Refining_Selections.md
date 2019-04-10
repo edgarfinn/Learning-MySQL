@@ -321,6 +321,8 @@ SELECT title, released_year, pages FROM books ORDER BY 3;
 
 You can also `ORDER BY` multiple columns:
 
+`SELECT column_a, column_b, column_b FROM table_name ORDER BY column_b, column_c;`
+
 ```SQL
 SELECT title, released_year, pages FROM books ORDER BY released_year, pages;
 -- +-----------------------------------------------------+---------------+-------+
