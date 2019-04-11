@@ -154,11 +154,14 @@ Orders results by the specified value (ie column_name)
 NB: Works equally for letters and nummbers
 
 Syntax:
+
 `SELECT column_name[s] FROM table_name ORDER BY column_name;`
+
 `SELECT column_name[s] FROM table_name ORDER BY column_name DESC;`
+
 `SELECT column_name[s] FROM table_name ORDER BY column_name ASC;`
 
-The `ORDER BY` column doesnt have to be present in the query:
+The column used in `ORDER BY` doesnt have to be present in the `SELECT` query:
 
 `SELECT column_a FROM table_name ORDER BY column_b`;
 
@@ -321,7 +324,7 @@ SELECT title, released_year, pages FROM books ORDER BY 3;
 
 You can also `ORDER BY` multiple columns:
 
-`SELECT column_a, column_b, column_b FROM table_name ORDER BY column_b, column_c;`
+`SELECT column_a, column_b, column_c FROM table_name ORDER BY column_b, column_c;`
 
 ```SQL
 SELECT title, released_year, pages FROM books ORDER BY released_year, pages;
