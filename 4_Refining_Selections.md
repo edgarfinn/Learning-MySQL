@@ -471,7 +471,11 @@ SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 8, 9685
 
 ### `LIKE`
 
-`LIKE` allows you to implement wildcards in a search, using `%` to denote the wildcard.
+`LIKE` allows you to implement wildcards in a search, using `%` or `_` (underscore) to denote the wildcard(s).
+
+- `%` allows any number of characters within that wildcard.
+
+- `_` will allow only 1 character within that wildcard.
 
 Syntax:
 
@@ -527,4 +531,40 @@ SELECT title, author_fname, author_lname FROM books WHERE author_fname LIKE 'da%
 -- | Consider the Lobster                      | David        | Foster Wallace |
 -- | 10% Happier                               | Dan          | Harris         |
 -- +-------------------------------------------+--------------+----------------+
+```
+
+```SQL
+SELECT title, author_fname, author_lname FROM books WHERE author_fname LIKE 'da_';
+-- +-------------+--------------+--------------+
+-- | title       | author_fname | author_lname |
+-- +-------------+--------------+--------------+
+-- | 10% Happier | Dan          | Harris       |
+-- +-------------+--------------+--------------+
+
+SELECT title, author_fname, author_lname FROM books WHERE author_fname LIKE 'da__';
+-- +-------------------------------------------+--------------+--------------+
+-- | title                                     | author_fname | author_lname |
+-- +-------------------------------------------+--------------+--------------+
+-- | A Hologram for the King: A Novel          | Dave         | Eggers       |
+-- | The Circle                                | Dave         | Eggers       |
+-- | A Heartbreaking Work of Staggering Genius | Dave         | Eggers       |
+-- +-------------------------------------------+--------------+--------------+
+```
+
+You can search values containing % signs and _ underscores by escaping them with a backslash like so:
+
+```SQL
+SELECT title FROM books WHERE title LIKE '%\%%'
+-- +-------------+
+-- | title       |
+-- +-------------+
+-- | 10% Happier |
+-- +-------------+
+
+SELECT title FROM books WHERE title LIKE '%\_%';
+-- +-----------+
+-- | title     |
+-- +-----------+
+-- | fake_book |
+-- +-----------+
 ```
