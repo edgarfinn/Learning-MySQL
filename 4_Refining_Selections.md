@@ -352,3 +352,119 @@ SELECT title, released_year, pages FROM books ORDER BY released_year, pages;
 -- | Lincoln In The Bardo                                |          2017 |   367 |
 -- +-----------------------------------------------------+---------------+-------+
 ```
+
+### `LIMIT`
+Restricts the number of results returned.
+
+```SQL
+SELECT column FROM table LIMIT nResults;
+-- where nResults = the number of results you want
+
+SELECT column FROM table LIMIT nFrom, nResults;
+-- where nFrom = the index of the results list from which you want the limit to start
+```
+
+Example:
+```SQL
+SELECT title FROM books LIMIT 7;
+-- +-------------------------------------------+
+-- | title                                     |
+-- +-------------------------------------------+
+-- | The Namesake                              |
+-- | Norse Mythology                           |
+-- | American Gods                             |
+-- | Interpreter of Maladies                   |
+-- | A Hologram for the King: A Novel          |
+-- | The Circle                                |
+-- | The Amazing Adventures of Kavalier & Clay |
+-- +-------------------------------------------+
+
+SELECT title FROM books LIMIT 2, 7;
+-- +-------------------------------------------+
+-- | title                                     |
+-- +-------------------------------------------+
+-- | American Gods                             |
+-- | Interpreter of Maladies                   |
+-- | A Hologram for the King: A Novel          |
+-- | The Circle                                |
+-- | The Amazing Adventures of Kavalier & Clay |
+-- | Just Kids                                 |
+-- | A Heartbreaking Work of Staggering Genius |
+-- +-------------------------------------------+
+```
+
+`LIMIT` is usually most effective when combined with other refinements such as `ORDER BY`.
+
+For example, to get the 5 most recent books:
+
+```SQL
+SELECT title, released_year FROM books ORDER BY released_year DESC;
+-- +-----------------------------------------------------+---------------+
+-- | title                                               | released_year |
+-- +-----------------------------------------------------+---------------+
+-- | Lincoln In The Bardo                                |          2017 |
+-- | Norse Mythology                                     |          2016 |
+-- | 10% Happier                                         |          2014 |
+-- | The Circle                                          |          2013 |
+-- | A Hologram for the King: A Novel                    |          2012 |
+-- | Just Kids                                           |          2010 |
+-- | Consider the Lobster                                |          2005 |
+-- | Oblivion: Stories                                   |          2004 |
+-- | Coraline                                            |          2003 |
+-- | The Namesake                                        |          2003 |
+-- | fake_book                                           |          2001 |
+-- | American Gods                                       |          2001 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 |
+-- | Interpreter of Maladies                             |          1996 |
+-- | Where Im Calling From: Selected Stories             |          1989 |
+-- | White Noise                                         |          1985 |
+-- | What We Talk About When We Talk About Love: Stories |          1981 |
+-- | Cannery Row                                         |          1945 |
+-- +-----------------------------------------------------+---------------+
+-- 19 rows in set (0.01 sec)
+
+SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 5;
+-- +----------------------------------+---------------+
+-- | title                            | released_year |
+-- +----------------------------------+---------------+
+-- | Lincoln In The Bardo             |          2017 |
+-- | Norse Mythology                  |          2016 |
+-- | 10% Happier                      |          2014 |
+-- | The Circle                       |          2013 |
+-- | A Hologram for the King: A Novel |          2012 |
+-- +----------------------------------+---------------+
+```
+
+Or to just get the 2nd and 3rd most recent books:
+
+```sql
+SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 1, 2;
+-- +-----------------+---------------+
+-- | title           | released_year |
+-- +-----------------+---------------+
+-- | Norse Mythology |          2016 |
+-- | 10% Happier     |          2014 |
+-- +-----------------+---------------+
+```
+
+If you want to list results from some results position to the end of the list, MySQL's official advice is to just provide a random long number (!?) :scream:
+
+```SQL
+SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 8, 9685645456;
+-- +-----------------------------------------------------+---------------+
+-- | title                                               | released_year |
+-- +-----------------------------------------------------+---------------+
+-- | Coraline                                            |          2003 |
+-- | The Namesake                                        |          2003 |
+-- | fake_book                                           |          2001 |
+-- | American Gods                                       |          2001 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 |
+-- | Interpreter of Maladies                             |          1996 |
+-- | Where Im Calling From: Selected Stories             |          1989 |
+-- | White Noise                                         |          1985 |
+-- | What We Talk About When We Talk About Love: Stories |          1981 |
+-- | Cannery Row                                         |          1945 |
+-- +-----------------------------------------------------+---------------+
+```
