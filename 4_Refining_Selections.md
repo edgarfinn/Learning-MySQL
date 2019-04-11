@@ -468,3 +468,63 @@ SELECT title, released_year FROM books ORDER BY released_year DESC LIMIT 8, 9685
 -- | Cannery Row                                         |          1945 |
 -- +-----------------------------------------------------+---------------+
 ```
+
+### `LIKE`
+
+`LIKE` allows you to implement wildcards in a search, using `%` to denote the wildcard.
+
+Syntax:
+
+`SELECT column FROM table WHERE column LIKE '% grepValue %';`
+
+Example:
+
+```SQL
+SELECT title FROM books WHERE title LIKE '%the%';
+-- +-------------------------------------------+
+-- | title                                     |
+-- +-------------------------------------------+
+-- | The Namesake                              |
+-- | A Hologram for the King: A Novel          |
+-- | The Circle                                |
+-- | The Amazing Adventures of Kavalier & Clay |
+-- | Consider the Lobster                      |
+-- | Lincoln In The Bardo                      |
+-- +-------------------------------------------+
+```
+
+Note that if you put wildcard symbols on both ends of the search value, the search will permit results with text on either side of the search value.
+
+For example, if you wanted to search an author was either dave or dan (or something starting with "da"):
+
+```SQL
+SELECT title, author_fname, author_lname FROM books WHERE author_fname LIKE '%da%';
+-- +-------------------------------------------+--------------+----------------+
+-- | title                                     | author_fname | author_lname   |
+-- +-------------------------------------------+--------------+----------------+
+-- | A Hologram for the King: A Novel          | Dave         | Eggers         |
+-- | The Circle                                | Dave         | Eggers         |
+-- | A Heartbreaking Work of Staggering Genius | Dave         | Eggers         |
+-- | Oblivion: Stories                         | David        | Foster Wallace |
+-- | Consider the Lobster                      | David        | Foster Wallace |
+-- | 10% Happier                               | Dan          | Harris         |
+-- | fake_book                                 | Freida       | Harris         |
+-- +-------------------------------------------+--------------+----------------+
+-- 7 rows in set (0.00 sec)
+```
+
+Notice `Freida Harris` appears in the above result, so by removing the first `%`, you can refine the result to only authors who's names **begin** with 'da'.
+
+```SQL
+SELECT title, author_fname, author_lname FROM books WHERE author_fname LIKE 'da%';
+-- +-------------------------------------------+--------------+----------------+
+-- | title                                     | author_fname | author_lname   |
+-- +-------------------------------------------+--------------+----------------+
+-- | A Hologram for the King: A Novel          | Dave         | Eggers         |
+-- | The Circle                                | Dave         | Eggers         |
+-- | A Heartbreaking Work of Staggering Genius | Dave         | Eggers         |
+-- | Oblivion: Stories                         | David        | Foster Wallace |
+-- | Consider the Lobster                      | David        | Foster Wallace |
+-- | 10% Happier                               | Dan          | Harris         |
+-- +-------------------------------------------+--------------+----------------+
+```
