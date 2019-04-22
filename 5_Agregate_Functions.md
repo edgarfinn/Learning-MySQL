@@ -1,5 +1,8 @@
 # Aggregate functions
 
+Wikipedia definition:
+> "In database management an aggregate function or aggregation function is a function where the values of multiple rows are grouped together to form a single summary value."
+
 ### `GROUP BY`
 
 Summarises or aggregates identical data into single rows.
@@ -179,25 +182,25 @@ SELECT title, author_fname, author_lname, released_year FROM books ORDER BY auth
 -- 19 rows in set (0.00 sec)
 ```
 
-Using `GROUP BY`, you can group results into clusters of identical data (ie clusters of the different authors), and pass those results on to aggregate functions. IN the example of `MIN` and `MAX`:
+Using `GROUP BY`, you can group results into clusters of identical data (ie clusters of the different authors), and pass those results on to aggregate functions.
 
 ```SQL
-SELECT author_fname, author_lname, MAX(released_year) FROM books GROUP BY author_lname, author_fname;
--- +--------------+----------------+--------------------+
--- | author_fname | author_lname   | MAX(released_year) |
--- +--------------+----------------+--------------------+
--- | Raymond      | Carver         |               1989 |
--- | Michael      | Chabon         |               2000 |
--- | Don          | DeLillo        |               1985 |
--- | Dave         | Eggers         |               2013 |
--- | David        | Foster Wallace |               2005 |
--- | Neil         | Gaiman         |               2016 |
--- | Dan          | Harris         |               2014 |
--- | Freida       | Harris         |               2001 |
--- | Jhumpa       | Lahiri         |               2003 |
--- | George       | Saunders       |               2017 |
--- | Patti        | Smith          |               2010 |
--- | John         | Steinbeck      |               1945 |
--- +--------------+----------------+--------------------+
+SELECT title, author_fname, author_lname, MAX(released_year) FROM books GROUP BY author_lname, author_fname;
+-- +-----------------------------------------------------+--------------+----------------+--------------------+
+-- | title                                               | author_fname | author_lname   | MAX(released_year) |
+-- +-----------------------------------------------------+--------------+----------------+--------------------+
+-- | What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |               1989 |
+-- | The Amazing Adventures of Kavalier & Clay           | Michael      | Chabon         |               2000 |
+-- | White Noise                                         | Don          | DeLillo        |               1985 |
+-- | A Hologram for the King: A Novel                    | Dave         | Eggers         |               2013 |
+-- | Oblivion: Stories                                   | David        | Foster Wallace |               2005 |
+-- | Norse Mythology                                     | Neil         | Gaiman         |               2016 |
+-- | 10% Happier                                         | Dan          | Harris         |               2014 |
+-- | fake_book                                           | Freida       | Harris         |               2001 |
+-- | The Namesake                                        | Jhumpa       | Lahiri         |               2003 |
+-- | Lincoln In The Bardo                                | George       | Saunders       |               2017 |
+-- | Just Kids                                           | Patti        | Smith          |               2010 |
+-- | Cannery Row                                         | John         | Steinbeck      |               1945 |
+-- +-----------------------------------------------------+--------------+----------------+--------------------+
 -- 12 rows in set (0.00 sec)
 ```
