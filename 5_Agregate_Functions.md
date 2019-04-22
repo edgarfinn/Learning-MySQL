@@ -327,3 +327,37 @@ ORDER BY Pages DESC LIMIT 1;
 +----------------------------------+------------+-------+
 1 row in set (0.00 sec)
 ```
+
+### AVG
+
+Returns the average value of a set of data, by adding the total values together, and dividing it by the number of values passed in.
+
+#### Finding the average number of pages for the books in the table:
+
+```SQL
+SELECT AVG(pages) FROM books;
+-- +------------+
+-- | AVG(pages) |
+-- +------------+
+-- |   348.5789 |
+-- +------------+
+-- 1 row in set (0.00 sec)
+
+-- By default the value returned has 4 decimal places.
+```
+
+Here, MySQL has added together the page counts of each book, and divided that total by the number of books.
+
+To verify the result:
+
+```SQL
+SELECT SUM(pages) / COUNT(*) FROM books;
+-- +-----------------------+
+-- | SUM(pages) / COUNT(*) |
+-- +-----------------------+
+-- |              348.5789 |
+-- +-----------------------+
+-- 1 row in set (0.00 sec)
+```
+
+#### Calculating the **average** stock quantity of books released in the same year.
