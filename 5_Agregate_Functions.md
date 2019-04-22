@@ -150,12 +150,14 @@ Notice how even in a table of just 19 books, the execution time is 0.01 sec fast
 
 #### Using `MIN` and `MAX` with `GROUP BY`
 
-##### Finding the most recent book released by a given author.
+#### Finding the most recent book released by a given author.
 
 The relevant fields would be `title`, `author_fname`, `author_lname`, and `released_year`.
 
 ```SQL
-SELECT title, author_fname, author_lname, released_year FROM books ORDER BY author_fname, author_lname, released_year DESC;
+SELECT title, author_fname, author_lname, released_year
+FROM books
+ORDER BY author_fname, author_lname, released_year DESC;
 -- +-----------------------------------------------------+--------------+----------------+---------------+
 -- | title                                               | author_fname | author_lname   | released_year |
 -- +-----------------------------------------------------+--------------+----------------+---------------+
@@ -185,7 +187,9 @@ SELECT title, author_fname, author_lname, released_year FROM books ORDER BY auth
 Using `GROUP BY`, you can group results into clusters of identical data (ie clusters of the different authors), and pass those results on to aggregate functions.
 
 ```SQL
-SELECT title, author_fname, author_lname, MAX(released_year) FROM books GROUP BY author_lname, author_fname;
+SELECT title, author_fname, author_lname, MAX(released_year)
+FROM books
+GROUP BY author_lname, author_fname;
 -- +-----------------------------------------------------+--------------+----------------+--------------------+
 -- | title                                               | author_fname | author_lname   | MAX(released_year) |
 -- +-----------------------------------------------------+--------------+----------------+--------------------+
@@ -203,4 +207,123 @@ SELECT title, author_fname, author_lname, MAX(released_year) FROM books GROUP BY
 -- | Cannery Row                                         | John         | Steinbeck      |               1945 |
 -- +-----------------------------------------------------+--------------+----------------+--------------------+
 -- 12 rows in set (0.00 sec)
+```
+
+#### Finding the longest book by an author.
+
+Relevant information is `title`, `author_fname`, `author_lname` and `pages`.
+
+```SQL
+SELECT title, CONCAT(author_fname, ' ', author_lname) AS Name, pages FROM books;
+-- +-----------------------------------------------------+----------------------+-------+
+-- | title                                               | Name                 | pages |
+-- +-----------------------------------------------------+----------------------+-------+
+-- | The Namesake                                        | Jhumpa Lahiri        |   291 |
+-- | Norse Mythology                                     | Neil Gaiman          |   304 |
+-- | American Gods                                       | Neil Gaiman          |   465 |
+-- | Interpreter of Maladies                             | Jhumpa Lahiri        |   198 |
+-- | A Hologram for the King: A Novel                    | Dave Eggers          |   352 |
+-- | The Circle                                          | Dave Eggers          |   504 |
+-- | The Amazing Adventures of Kavalier & Clay           | Michael Chabon       |   634 |
+-- | Just Kids                                           | Patti Smith          |   304 |
+-- | A Heartbreaking Work of Staggering Genius           | Dave Eggers          |   437 |
+-- | Coraline                                            | Neil Gaiman          |   208 |
+-- | What We Talk About When We Talk About Love: Stories | Raymond Carver       |   176 |
+-- | Where Im Calling From: Selected Stories             | Raymond Carver       |   526 |
+-- | White Noise                                         | Don DeLillo          |   320 |
+-- | Cannery Row                                         | John Steinbeck       |   181 |
+-- | Oblivion: Stories                                   | David Foster Wallace |   329 |
+-- | Consider the Lobster                                | David Foster Wallace |   343 |
+-- | 10% Happier                                         | Dan Harris           |   256 |
+-- | fake_book                                           | Freida Harris        |   428 |
+-- | Lincoln In The Bardo                                | George Saunders      |   367 |
+-- +-----------------------------------------------------+----------------------+-------+
+-- 19 rows in set (0.00 sec)
+```
+
+By grouping author names, the `MAX` aggregate function will just return one result from each `GROUP BY` cluster:
+
+```SQL
+SELECT
+  title,
+  CONCAT(author_fname, ' ', author_lname) AS Author,
+  MAX(pages) as 'Longest book'
+FROM books
+GROUP BY author_fname, author_lname;
+-- +-----------------------------------------------------+----------------------+--------------+
+-- | title                                               | Author               | Longest book |
+-- +-----------------------------------------------------+----------------------+--------------+
+-- | 10% Happier                                         | Dan Harris           |          256 |
+-- | A Hologram for the King: A Novel                    | Dave Eggers          |          504 |
+-- | Oblivion: Stories                                   | David Foster Wallace |          343 |
+-- | White Noise                                         | Don DeLillo          |          320 |
+-- | fake_book                                           | Freida Harris        |          428 |
+-- | Lincoln In The Bardo                                | George Saunders      |          367 |
+-- | The Namesake                                        | Jhumpa Lahiri        |          291 |
+-- | Cannery Row                                         | John Steinbeck       |          181 |
+-- | The Amazing Adventures of Kavalier & Clay           | Michael Chabon       |          634 |
+-- | Norse Mythology                                     | Neil Gaiman          |          465 |
+-- | Just Kids                                           | Patti Smith          |          304 |
+-- | What We Talk About When We Talk About Love: Stories | Raymond Carver       |          526 |
+-- +-----------------------------------------------------+----------------------+--------------+
+-- 12 rows in set (0.00 sec)
+```
+
+### `SUM`
+Returns a single value by adding together all values passed into it.
+
+```SQL
+SELECT SUM(1 + 3 + 5);
+-- +----------------+
+-- | SUM(1 + 3 + 5) |
+-- +----------------+
+-- |              9 |
+-- +----------------+
+-- 1 row in set (0.00 sec)
+```
+
+#### Finding the author who has written the most amount of pages in total.
+
+```SQL
+SELECT
+  title,
+  CONCAT(author_fname, author_lname) AS Author,
+  SUM(pages) AS Pages
+FROM books
+GROUP BY author_fname, author_lname;
+-- +-----------------------------------------------------+---------------------+-------+
+-- | title                                               | Author              | Pages |
+-- +-----------------------------------------------------+---------------------+-------+
+-- | 10% Happier                                         | DanHarris           |   256 |
+-- | A Hologram for the King: A Novel                    | DaveEggers          |  1293 |
+-- | Oblivion: Stories                                   | DavidFoster Wallace |   672 |
+-- | White Noise                                         | DonDeLillo          |   320 |
+-- | fake_book                                           | FreidaHarris        |   428 |
+-- | Lincoln In The Bardo                                | GeorgeSaunders      |   367 |
+-- | The Namesake                                        | JhumpaLahiri        |   489 |
+-- | Cannery Row                                         | JohnSteinbeck       |   181 |
+-- | The Amazing Adventures of Kavalier & Clay           | MichaelChabon       |   634 |
+-- | Norse Mythology                                     | NeilGaiman          |   977 |
+-- | Just Kids                                           | PattiSmith          |   304 |
+-- | What We Talk About When We Talk About Love: Stories | RaymondCarver       |   702 |
+-- +-----------------------------------------------------+---------------------+-------+
+-- 12 rows in set (0.00 sec)
+```
+
+Then in order to return just the author who has written the most pages, you can combine the above with either a sub-query, or an limited `ORDER BY` constraint:
+
+```SQL
+SELECT
+  title,
+  CONCAT(author_fname, author_lname) AS Author,
+  SUM(pages) AS Pages
+FROM books
+GROUP BY author_fname, author_lname
+ORDER BY Pages DESC LIMIT 1;
++----------------------------------+------------+-------+
+| title                            | Author     | Pages |
++----------------------------------+------------+-------+
+| A Hologram for the King: A Novel | DaveEggers |  1293 |
++----------------------------------+------------+-------+
+1 row in set (0.00 sec)
 ```
