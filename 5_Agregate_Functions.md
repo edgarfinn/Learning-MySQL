@@ -360,4 +360,24 @@ SELECT SUM(pages) / COUNT(*) FROM books;
 -- 1 row in set (0.00 sec)
 ```
 
-#### Calculating the **average** stock quantity of books released in the same year.
+#### Calculate the **average** number of pages written by each author.
+```SQL
+SELECT author_fname, author_lname, AVG(pages) FROM books GROUP BY author_fname, author_lname;
+-- +--------------+----------------+------------+
+-- | author_fname | author_lname   | AVG(pages) |
+-- +--------------+----------------+------------+
+-- | Dan          | Harris         |   256.0000 |
+-- | Dave         | Eggers         |   431.0000 |
+-- | David        | Foster Wallace |   336.0000 |
+-- | Don          | DeLillo        |   320.0000 |
+-- | Freida       | Harris         |   428.0000 |
+-- | George       | Saunders       |   367.0000 |
+-- | Jhumpa       | Lahiri         |   244.5000 |
+-- | John         | Steinbeck      |   181.0000 |
+-- | Michael      | Chabon         |   634.0000 |
+-- | Neil         | Gaiman         |   325.6667 |
+-- | Patti        | Smith          |   304.0000 |
+-- | Raymond      | Carver         |   351.0000 |
+-- +--------------+----------------+------------+
+-- 12 rows in set (0.00 sec)
+```
