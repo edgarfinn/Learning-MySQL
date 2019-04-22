@@ -9,3 +9,5 @@
 - [4) Refining Selections](https://github.com/edgarfinn/Learning-MySQL/blob/master/4_Refining_Selections.md)
 
 - [5) Aggregate Functions](https://github.com/edgarfinn/Learning-MySQL/blob/master/5_Agregate_Functions.md)
+
+- [6) Data Types In Depth](https://github.com/edgarfinn/Learning-MySQL/blob/master/6_Data_Types_In_Depth.md)
