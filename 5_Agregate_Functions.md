@@ -107,6 +107,7 @@ The below syntax will just result with the lowest value in `one_field`, and the 
 
 For example, "The Namesake" is NOT the shortest book in the table, it is just the first one listed:
 ```SQL
+-- INCORRECT:
 SELECT MIN(pages), title FROM books;
 -- +------------+--------------+
 -- | MIN(pages) | title        |
@@ -143,3 +144,60 @@ SELECT title, pages FROM books ORDER BY pages ASC LIMIT 1;
 ```
 
 Notice how even in a table of just 19 books, the execution time is 0.01 sec faster.
+
+#### Using `MIN` and `MAX` with `GROUP BY`
+
+##### Finding the most recent book released by a given author.
+
+The relevant fields would be `title`, `author_fname`, `author_lname`, and `released_year`.
+
+```SQL
+SELECT title, author_fname, author_lname, released_year FROM books ORDER BY author_fname, author_lname, released_year DESC;
+-- +-----------------------------------------------------+--------------+----------------+---------------+
+-- | title                                               | author_fname | author_lname   | released_year |
+-- +-----------------------------------------------------+--------------+----------------+---------------+
+-- | 10% Happier                                         | Dan          | Harris         |          2014 |
+-- | The Circle                                          | Dave         | Eggers         |          2013 |
+-- | A Hologram for the King: A Novel                    | Dave         | Eggers         |          2012 |
+-- | A Heartbreaking Work of Staggering Genius           | Dave         | Eggers         |          2001 |
+-- | Consider the Lobster                                | David        | Foster Wallace |          2005 |
+-- | Oblivion: Stories                                   | David        | Foster Wallace |          2004 |
+-- | White Noise                                         | Don          | DeLillo        |          1985 |
+-- | fake_book                                           | Freida       | Harris         |          2001 |
+-- | Lincoln In The Bardo                                | George       | Saunders       |          2017 |
+-- | The Namesake                                        | Jhumpa       | Lahiri         |          2003 |
+-- | Interpreter of Maladies                             | Jhumpa       | Lahiri         |          1996 |
+-- | Cannery Row                                         | John         | Steinbeck      |          1945 |
+-- | The Amazing Adventures of Kavalier & Clay           | Michael      | Chabon         |          2000 |
+-- | Norse Mythology                                     | Neil         | Gaiman         |          2016 |
+-- | Coraline                                            | Neil         | Gaiman         |          2003 |
+-- | American Gods                                       | Neil         | Gaiman         |          2001 |
+-- | Just Kids                                           | Patti        | Smith          |          2010 |
+-- | Where Im Calling From: Selected Stories             | Raymond      | Carver         |          1989 |
+-- | What We Talk About When We Talk About Love: Stories | Raymond      | Carver         |          1981 |
+-- +-----------------------------------------------------+--------------+----------------+---------------+
+-- 19 rows in set (0.00 sec)
+```
+
+Using `GROUP BY`, you can group results into clusters of identical data (ie clusters of the different authors), and pass those results on to aggregate functions. IN the example of `MIN` and `MAX`:
+
+```SQL
+SELECT author_fname, author_lname, MAX(released_year) FROM books GROUP BY author_lname, author_fname;
+-- +--------------+----------------+--------------------+
+-- | author_fname | author_lname   | MAX(released_year) |
+-- +--------------+----------------+--------------------+
+-- | Raymond      | Carver         |               1989 |
+-- | Michael      | Chabon         |               2000 |
+-- | Don          | DeLillo        |               1985 |
+-- | Dave         | Eggers         |               2013 |
+-- | David        | Foster Wallace |               2005 |
+-- | Neil         | Gaiman         |               2016 |
+-- | Dan          | Harris         |               2014 |
+-- | Freida       | Harris         |               2001 |
+-- | Jhumpa       | Lahiri         |               2003 |
+-- | George       | Saunders       |               2017 |
+-- | Patti        | Smith          |               2010 |
+-- | John         | Steinbeck      |               1945 |
+-- +--------------+----------------+--------------------+
+-- 12 rows in set (0.00 sec)
+```
