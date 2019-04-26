@@ -61,6 +61,8 @@ So for example: `CREATE TABLE items(price DECIMAL(5,2));` would declare a field 
 
 - `FLOAT`s require 4 bytes of memory, and will have precision issues after around 7 digits.
 
+- `DOUBLE`s require 8 bytes of memory, and will have precision issues after around 15 digits.
+
 ```SQL
 CREATE TABLE floats(price FLOAT);
 
@@ -94,5 +96,38 @@ SELECT * FROM floats;
 -- | 99887800 |
 -- +----------+
 ```
+Notice in the last insert, the 7th character  of the inserted value has been rounded into the 6th, and the remainder of the value is just padded with zeros. This is the nature of the precision error faced with `FLOAT` and `DOUBLE`.
 
-- `DOUBLE`s require 8 bytes of memory, and will have precision issues after around 15 digits.
+As a rule of thumb, unless you absolutely know taht precision doesn't matter, its best to default to using `DECIMAL`.
+
+### Dates and Times.
+
+- `DATE` (no time) `YYYY-MM-DD`
+
+- `TIME` (no date) `HH:MM:SS`
+
+- `DATETIME` (most commonly used) `YYYY-MM-DD HH:MM:SS`
+
+```SQL
+CREATE TABLE people (
+    -> name VARCHAR(100),
+    -> birthdate DATE,
+    -> birthtime TIME,
+    -> birthdt DATETIME
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES('Padma', '1983-11-11', '10:07:35', '1983-11-11 10:07:35');
+
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES('Larry', '1943-12-25', '16:10:42', '1943-12-25 16:10:42');
+
+SELECT * FROM people;
+-- +-------+------------+-----------+---------------------+
+-- | name  | birthdate  | birthtime | birthdt             |
+-- +-------+------------+-----------+---------------------+
+-- | Padma | 1983-11-11 | 10:07:35  | 1983-11-11 10:07:35 |
+-- | Larry | 1943-12-25 | 16:10:42  | 1943-12-25 16:10:42 |
+-- +-------+------------+-----------+---------------------+
+```
