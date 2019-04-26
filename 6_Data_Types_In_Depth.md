@@ -131,3 +131,21 @@ SELECT * FROM people;
 -- | Larry | 1943-12-25 | 16:10:42  | 1943-12-25 16:10:42 |
 -- +-------+------------+-----------+---------------------+
 ```
+
+- `CURDATE()` - gives current date
+- `CURTIME()` - gives current time
+- `NOW()` - gives current datetime
+
+```SQL
+INSERT INTO people (name, birthdate, birthtime, birthdt)
+VALUES('Toaster', CURDATE(), CURTIME(), NOW());
+
+SELECT * FROM people;
+-- +---------+------------+-----------+---------------------+
+-- | name    | birthdate  | birthtime | birthdt             |
+-- +---------+------------+-----------+---------------------+
+-- | Padma   | 1983-11-11 | 10:07:35  | 1983-11-11 10:07:35 |
+-- | Larry   | 1943-12-25 | 16:10:42  | 1943-12-25 16:10:42 |
+-- | Toaster | 2019-04-26 | 08:15:03  | 2019-04-26 08:15:03 |
+-- +---------+------------+-----------+---------------------+
+```
