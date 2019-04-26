@@ -37,3 +37,19 @@ numbers that can whole decimal points.
 **M** is the maximum number of digits the number can be (including numbers after the decimal point). Can range from 1 to 65.
 
 **D** is the number of digits to the right of the decimal point, which can range form 0 to 30, and must be no larger than **M**.
+
+So for example: `CREATE TABLE items(price DECIMAL(5,2));` would declare a field for values that looked like: `nnn.nn`, like `999.99` (**5** digits long in total, and has **2** digits after the decimal place).
+
+- it will always add the specified digits to the right of the decimal point, even if a whole number is added (in which case the decimals will just be zeros).
+
+  - eg: `INSERT INTO items(price) VALUES(7);` would be stored as `7.00`.
+
+
+- it will round any numbers that exceed the maximum possible value of its constraints.
+
+  - eg: `INSERT INTO items(price) VALUES(798654);` would be stored as `999.99`.
+
+- rounding may also be applied to decimal places that exceed the character limit:
+
+  - eg: `INSERT INTO items(price) VALUES(298.9999);` will be stored as `299.00`, to round up the excess 9's after the decimal place.
+  - similarly, `INSERT INTO items(price) VALUES(1.99999);` would be stored as `2.00`, again rounding up the excess 9s.
