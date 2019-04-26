@@ -53,3 +53,46 @@ So for example: `CREATE TABLE items(price DECIMAL(5,2));` would declare a field 
 
   - eg: `INSERT INTO items(price) VALUES(298.9999);` will be stored as `299.00`, to round up the excess 9's after the decimal place.
   - similarly, `INSERT INTO items(price) VALUES(1.99999);` would be stored as `2.00`, again rounding up the excess 9s.
+
+
+### Approximate value numbers (`FLOAT` and `DOUBLE`).
+
+`FLOAT` and `DOUBLE` are floating-point data types, and calculations are approximate. They can however be useful for storing larger numbers using less storage space.
+
+- `FLOAT`s require 4 bytes of memory, and will have precision issues after around 7 digits.
+
+```SQL
+CREATE TABLE floats(price FLOAT);
+
+INSERT INTO floats(price) VALUES(25);
+
+SELECT * FROM floats;
+-- +-------+
+-- | price |
+-- +-------+
+-- |    25 |
+-- +-------+
+
+INSERT INTO floats(price) VALUES(99.88);
+
+SELECT * FROM floats;
+-- +-------+
+-- | price |
+-- +-------+
+-- |    25 |
+-- | 99.88 |
+-- +-------+
+
+INSERT INTO floats(price) VALUES(99887766.55);
+
+SELECT * FROM floats;
+-- +----------+
+-- | price    |
+-- +----------+
+-- |       25 |
+-- |    99.88 |
+-- | 99887800 |
+-- +----------+
+```
+
+- `DOUBLE`s require 8 bytes of memory, and will have precision issues after around 15 digits.
