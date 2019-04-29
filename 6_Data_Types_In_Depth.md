@@ -49,6 +49,7 @@ So for example: `CREATE TABLE items(price DECIMAL(5,2));` would declare a field 
 
   - eg: `INSERT INTO items(price) VALUES(798654);` would be stored as `999.99`.
 
+
 - rounding may also be applied to decimal places that exceed the character limit:
 
   - eg: `INSERT INTO items(price) VALUES(298.9999);` will be stored as `299.00`, to round up the excess 9's after the decimal place.
@@ -98,7 +99,7 @@ SELECT * FROM floats;
 ```
 Notice in the last insert, the 7th character  of the inserted value has been rounded into the 6th, and the remainder of the value is just padded with zeros. This is the nature of the precision error faced with `FLOAT` and `DOUBLE`.
 
-As a rule of thumb, unless you absolutely know taht precision doesn't matter, its best to default to using `DECIMAL`.
+As a rule of thumb, unless you absolutely know that precision doesn't matter, its best to default to using `DECIMAL` or `INT`.
 
 ### Dates and Times.
 
@@ -148,4 +149,22 @@ SELECT * FROM people;
 -- | Larry   | 1943-12-25 | 16:10:42  | 1943-12-25 16:10:42 |
 -- | Toaster | 2019-04-26 | 08:15:03  | 2019-04-26 08:15:03 |
 -- +---------+------------+-----------+---------------------+
+```
+
+### Formatting Dates
+
+MySQL has a bunch of [Date ane Time functions](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html) that can be used to reformat info as its being `SELECT`ed from a table.
+
+`DAY()`, `DAYNAME()`, `DAYOFMONTH()`, `DAYOFWEEK()`, `DAYOFYEAR()`, `HOUR()`, `MONTH()`, `MINUTE()` and similar formatters are all worth checking out in the docs (linked above).
+
+```SQL
+SELECT birthdate, DAY(birthdate), DAYNAME(birthdate), DAYOFMONTH(birthdate), DAYOFWEEK(birthdate) FROM people;
+-- +------------+----------------+--------------------+-----------------------+----------------------+
+-- | birthdate  | DAY(birthdate) | DAYNAME(birthdate) | DAYOFMONTH(birthdate) | DAYOFWEEK(birthdate) |
+-- +------------+----------------+--------------------+-----------------------+----------------------+
+-- | 1983-11-11 |             11 | Friday             |                    11 |                    6 |
+-- | 1943-12-25 |             25 | Saturday           |                    25 |                    7 |
+-- | 2019-04-26 |             26 | Friday             |                    26 |                    6 |
+-- +------------+----------------+--------------------+-----------------------+----------------------+
+-- 3 rows in set (0.00 sec)
 ```
