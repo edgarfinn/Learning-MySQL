@@ -180,3 +180,92 @@ SELECT birthdate, DAYOFYEAR(birthdate), MONTH(birthdate), HOUR(birthtime), MINUT
 -- +------------+----------------------+------------------+-----------------+-----------------+
 -- 3 rows in set (0.00 sec)
 ```
+
+### [Collations, and Character sets](https://dev.mysql.com/doc/refman/8.0/en/charset-general.html)
+
+Beware of mixing different charsets in one `CONCAT()`, mysql not know which collation / charset to use, so you may need to specify.
+
+For example:
+
+```SQL
+SELECT
+  CONCAT(
+    name,
+    ' was born on a ',
+    DAYNAME(birthdt)
+  )
+FROM people;
+
+-- ERROR 1270 (HY000): Illegal mix of collations (latin1_swedish_ci,IMPLICIT), (utf8_general_ci,COERCIBLE), (utf8_general_ci,COERCIBLE) for operation 'concat'
+
+-- #ONE POSSIBLE SOLUTION:
+SELECT
+  CONCAT(
+    name,
+    ' was born on a ',
+    DAYNAME(birthdt) COLLATE utf8_general_ci
+  )
+FROM people;  
+-- +---------------------------------------------------------------------------+
+-- | CONCAT(name, ' was born on a ', DAYNAME(birthdt) COLLATE utf8_general_ci) |
+-- +---------------------------------------------------------------------------+
+-- | Padma was born on a Friday                                                |
+-- | Larry was born on a Saturday                                              |
+-- | Toaster was born on a Friday                                              |
+-- +---------------------------------------------------------------------------+
+-- 3 rows in set (0.00 sec)
+```
+
+Alternaively, use `DATE_FORMAT`:
+
+### [`DATE_FORMAT`](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_date-format)
+
+`DATE_FORMAT` takes a date as a first argument, and then a string as a second, in which [specified characters](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_date-format) can be passed in using the `%` key.
+
+```SQL
+SELECT CONCAT(name, ' ', DATE_FORMAT(birthdt, 'was born on a %W')) FROM people;
+-- +-------------------------------------------------------------+
+-- | CONCAT(name, ' ', DATE_FORMAT(birthdt, 'was born on a %W')) |
+-- +-------------------------------------------------------------+
+-- | Padma was born on a Friday                                  |
+-- | Larry was born on a Saturday                                |
+-- | Toaster was born on a Friday                                |
+-- +-------------------------------------------------------------+
+-- 3 rows in set (0.00 sec)
+
+SELECT
+  CONCAT(
+    name,
+    ' was born on ',
+    DATE_FORMAT(birthdt, '%W the %D of %M, %Y')
+  ) AS Birthday
+FROM people;
+-- +-------------------------------------------------------+
+-- | Birthday                                              |
+-- +-------------------------------------------------------+
+-- | Padma was born on Friday the 11th of November, 1983   |
+-- | Larry was born on Saturday the 25th of December, 1943 |
+-- | Toaster was born on Friday the 26th of April, 2019    |
+-- +-------------------------------------------------------+
+-- 3 rows in set (0.00 sec)
+
+SELECT DATE_FORMAT(birthdt, '%m/%d/%Y') FROM people;
+-- +----------------------------------+
+-- | DATE_FORMAT(birthdt, '%m/%d/%Y') |
+-- +----------------------------------+
+-- | 11/11/1983                       |
+-- | 12/25/1943                       |
+-- | 04/26/2019                       |
+-- +----------------------------------+
+-- 3 rows in set (0.00 sec)
+
+SELECT DATE_FORMAT(birthdt, '%m/%d/%Y at %h:%i') FROM people;
+-- +-------------------------------------------+
+-- | DATE_FORMAT(birthdt, '%m/%d/%Y at %h:%i') |
+-- +-------------------------------------------+
+-- | 11/11/1983 at 10:07                       |
+-- | 12/25/1943 at 04:10                       |
+-- | 04/26/2019 at 08:15                       |
+-- +-------------------------------------------+
+-- 3 rows in set (0.00 sec)
+```
