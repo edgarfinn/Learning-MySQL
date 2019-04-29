@@ -168,3 +168,15 @@ SELECT birthdate, DAY(birthdate), DAYNAME(birthdate), DAYOFMONTH(birthdate), DAY
 -- +------------+----------------+--------------------+-----------------------+----------------------+
 -- 3 rows in set (0.00 sec)
 ```
+
+```SQL
+SELECT birthdate, DAYOFYEAR(birthdate), MONTH(birthdate), HOUR(birthtime), MINUTE(birthdt) FROM people;
+-- +------------+----------------------+------------------+-----------------+-----------------+
+-- | birthdate  | DAYOFYEAR(birthdate) | MONTH(birthdate) | HOUR(birthtime) | MINUTE(birthdt) |
+-- +------------+----------------------+------------------+-----------------+-----------------+
+-- | 1983-11-11 |                  315 |               11 |              10 |               7 |
+-- | 1943-12-25 |                  359 |               12 |              16 |              10 |
+-- | 2019-04-26 |                  116 |                4 |               8 |              15 |
+-- +------------+----------------------+------------------+-----------------+-----------------+
+-- 3 rows in set (0.00 sec)
+```
