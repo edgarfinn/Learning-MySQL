@@ -392,8 +392,50 @@ Timestamps are used to store information about when information is added or upda
 
 Timestamps have the same format as `DATETIME` (ie: `'YYYY-MM-DD hh:mm:ss'`), but one key difference between `DATETIME` and `TIMESTAMP` is the supported date ranges:
 
-- `DATETIME` supports dates from `'1000-01-01 00:00:00'` to `'9999-12-31 23:59:59'`
+- `DATETIME`
+  - supports dates from `'1000-01-01 00:00:00'` to `'9999-12-31 23:59:59'`
+  - take up more storage space.
 
 whereas
 
-- `TIMESTAMP` supports dates from `'1970-01-01 00:00:01'` UTC to `'2038-01-19 03:14:07'` UTC.
+- `TIMESTAMP`
+  - supports dates from `'1970-01-01 00:00:01'` UTC to `'2038-01-19 03:14:07'` UTC.
+  - take up less storage.
+
+See documentation on [DATE, DATETIME and TIMESTAMP types](https://dev.mysql.com/doc/refman/8.0/en/datetime.html), and documentation on [Automatic initialization and Updating for TIMESTAMP and DATETIME](https://dev.mysql.com/doc/refman/8.0/en/timestamp-initialization.html)
+
+### Using `TIMESTAMP`
+
+Timestamp is best used for populating fields concerned with when an entry is created or updated. Common terminology used are:
+
+- `created_at`
+and
+- `updated_at`
+
+```SQL
+CREATE TABLES comments (
+  content VARCHAR(255),
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+INSERT INTO comments(content) VALUES('First comment, yay!');
+
+SELECT * FROM comments;
+-- +---------------------+---------------------+
+-- | content             | created_at          |
+-- +---------------------+---------------------+
+-- | First comment, yay! | 2019-05-01 08:06:24 |
+-- +---------------------+---------------------+
+-- 1 row in set (0.00 sec)
+
+INSERT INTO comments(content) VALUES('I hate mondays! :(');
+
+SELECT * FROM comments;
+-- +---------------------+---------------------+
+-- | content             | created_at          |
+-- +---------------------+---------------------+
+-- | First comment, yay! | 2019-05-01 08:06:24 |
+-- | I hate mondays! :(  | 2019-05-01 08:07:39 |
+-- +---------------------+---------------------+
+-- 2 rows in set (0.00 sec)
+```
