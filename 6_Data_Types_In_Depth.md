@@ -371,3 +371,29 @@ SELECT birthdate, birthdate + INTERVAL 15 DAY FROM people;
 -- +------------+-----------------------------+
 -- 3 rows in set (0.00 sec)
 ```
+
+
+You can also chain several sums:
+```SQL
+SELECT birthdt, birthdt + INTERVAL 15 MONTH + INTERVAL 10 HOUR FROM people;
+-- +---------------------+------------------------------------------------+
+-- | birthdt             | birthdt + INTERVAL 15 MONTH + INTERVAL 10 HOUR |
+-- +---------------------+------------------------------------------------+
+-- | 1983-11-11 10:07:35 | 1985-02-11 20:07:35                            |
+-- | 1943-12-25 16:10:42 | 1945-03-26 02:10:42                            |
+-- | 2019-04-26 08:15:03 | 2020-07-26 18:15:03                            |
+-- +---------------------+------------------------------------------------+
+-- 3 rows in set (0.00 sec)
+```
+
+### `TIMESTAMP`
+
+Timestamps are used to store information about when information is added or updated.
+
+Timestamps have the same format as `DATETIME` (ie: `'YYYY-MM-DD hh:mm:ss'`), but one key difference between `DATETIME` and `TIMESTAMP` is the supported date ranges:
+
+- `DATETIME` supports dates from `'1000-01-01 00:00:00'` to `'9999-12-31 23:59:59'`
+
+whereas
+
+- `TIMESTAMP` supports dates from `'1970-01-01 00:00:01'` UTC to `'2038-01-19 03:14:07'` UTC.
