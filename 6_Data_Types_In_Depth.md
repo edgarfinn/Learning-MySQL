@@ -305,6 +305,18 @@ whereby:
 - `unit` is the unit of time being added / subtracted. Expressed as a [temporal value](https://dev.mysql.com/doc/refman/8.0/en/expressions.html#temporal-intervals).
 
 ```SQL
+SELECT birthdate, DATE_ADD(birthdate, INTERVAL 15 DAY) FROM people;
+-- +------------+--------------------------------------+
+-- | birthdate  | DATE_ADD(birthdate, INTERVAL 15 DAY) |
+-- +------------+--------------------------------------+
+-- | 1983-11-11 | 1983-11-26                           |
+-- | 1943-12-25 | 1944-01-09                           |
+-- | 2019-04-26 | 2019-05-11                           |
+-- +------------+--------------------------------------+
+-- 3 rows in set (0.00 sec)
+```
+
+```SQL
 SELECT DATE_ADD('2018-05-01', INTERVAL 1 DAY);
 -- +----------------------------------------+
 -- | DATE_ADD('2018-05-01', INTERVAL 1 DAY) |
@@ -344,4 +356,18 @@ SELECT DATE_SUB('2025-01-01 00:00:00', INTERVAL '1 1:1:1' DAY_SECOND);
 -- | 2024-12-30 22:58:59                                            |
 -- +----------------------------------------------------------------+
 -- 1 row in set (0.00 sec)
+```
+
+Alternatively you can just run arithmetic within queries using plus and minus signs:
+
+```SQL
+SELECT birthdate, birthdate + INTERVAL 15 DAY FROM people;
+-- +------------+-----------------------------+
+-- | birthdate  | birthdate + INTERVAL 15 DAY |
+-- +------------+-----------------------------+
+-- | 1983-11-11 | 1983-11-26                  |
+-- | 1943-12-25 | 1944-01-09                  |
+-- | 2019-04-26 | 2019-05-11                  |
+-- +------------+-----------------------------+
+-- 3 rows in set (0.00 sec)
 ```
