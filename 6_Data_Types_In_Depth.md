@@ -269,3 +269,79 @@ SELECT DATE_FORMAT(birthdt, '%m/%d/%Y at %h:%i') FROM people;
 -- +-------------------------------------------+
 -- 3 rows in set (0.00 sec)
 ```
+
+
+### Date Math
+
+#### `DATEDIFF(date_one, date_two)`
+
+returns `date_one - date_two`.
+
+```SQL
+SELECT DATEDIFF(NOW(), birthdt) FROM people;
+-- +--------------------------+
+-- | DATEDIFF(NOW(), birthdt) |
+-- +--------------------------+
+-- |                    12955 |
+-- |                    27521 |
+-- |                        5 |
+-- +--------------------------+
+-- 3 rows in set (0.00 sec)
+```
+
+As with most `DATE` functions, `DATEDIFF` can work with either `DATE` values or `DATETIME` values.
+
+[Documentation](https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_datediff)
+
+#### `DATE_ADD` and `DATE_SUB`
+`DATE_ADD(date, INTERVAL expr, unit)`
+
+whereby:
+
+- `date` is the date or datetime value being evaluated.
+
+- `expr` is an integer expressing the number of units being added / subtracted.
+
+- `unit` is the unit of time being added / subtracted. Expressed as a [temporal value](https://dev.mysql.com/doc/refman/8.0/en/expressions.html#temporal-intervals).
+
+```SQL
+SELECT DATE_ADD('2018-05-01', INTERVAL 1 DAY);
+-- +----------------------------------------+
+-- | DATE_ADD('2018-05-01', INTERVAL 1 DAY) |
+-- +----------------------------------------+
+-- | 2018-05-02                             |
+-- +----------------------------------------+
+-- 1 row in set (0.00 sec)
+
+SELECT DATE_SUB('2018-05-01', INTERVAL 1 YEAR);
+-- +----------------------------------------+
+-- | DATE_SUB('2018-05-01', INTERVAL 1 YEAR)|
+-- +----------------------------------------+
+-- | 2017-05-01                             |
+-- +----------------------------------------+
+-- 1 row in set (0.00 sec)
+
+SELECT DATE_ADD('2020-12-31 23:59:59', INTERVAL 1 SECOND);
+-- +--------------------------------------------------------------------+
+-- | DATE_ADD('2020-12-31 23:59:59', INTERVAL 1 SECOND)                 |
+-- +--------------------------------------------------------------------+
+-- | 2021-01-01 00:00:00                                                |
+-- +--------------------------------------------------------------------+
+-- 1 row in set (0.00 sec)
+
+SELECT DATE_ADD('2100-12-31 23:59:59', INTERVAL '1:1' MINUTE_SECOND);
+-- +---------------------------------------------------------------+
+-- | DATE_ADD('2100-12-31 23:59:59', INTERVAL '1:1' MINUTE_SECOND) |
+-- +---------------------------------------------------------------+
+-- | 2101-01-01 00:01:00                                           |
+-- +---------------------------------------------------------------+
+-- 1 row in set (0.00 sec)
+
+SELECT DATE_SUB('2025-01-01 00:00:00', INTERVAL '1 1:1:1' DAY_SECOND);
+-- +----------------------------------------------------------------+
+-- | DATE_SUB('2025-01-01 00:00:00', INTERVAL '1 1:1:1' DAY_SECOND) |
+-- +----------------------------------------------------------------+
+-- | 2024-12-30 22:58:59                                            |
+-- +----------------------------------------------------------------+
+-- 1 row in set (0.00 sec)
+```
