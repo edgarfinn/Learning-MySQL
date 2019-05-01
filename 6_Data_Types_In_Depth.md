@@ -412,6 +412,8 @@ Timestamp is best used for populating fields concerned with when an entry is cre
 and
 - `updated_at`
 
+#### created_at example:
+
 ```SQL
 CREATE TABLES comments (
   content VARCHAR(255),
@@ -437,5 +439,58 @@ SELECT * FROM comments;
 -- | First comment, yay! | 2019-05-01 08:06:24 |
 -- | I hate mondays! :(  | 2019-05-01 08:07:39 |
 -- +---------------------+---------------------+
+-- 2 rows in set (0.00 sec)
+```
+
+#### updated_at example:
+
+`ON UPDATE` serves as a listener for when a field is changed.
+
+```SQL
+
+CREATE TABLE messages(
+  content VARCHAR(255),
+  updated_at TIMESTAMP DEFAULT NOW() ON UPDATE NOW()
+);
+
+INSERT INTO messages(content) VALUES('first message');
+
+INSERT INTO messages(content) VALUES('second message');
+
+SELECT * FROM messages;
+-- +----------------+---------------------+
+-- | content        | updated_at          |
+-- +----------------+---------------------+
+-- | first message  | 2019-05-01 08:26:25 |
+-- | second message | 2019-05-01 08:26:33 |
+-- +----------------+---------------------+
+-- 2 rows in set (0.00 sec)
+
+UPDATE messages SET content='updated first message' WHERE content='first message';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+SELECT * FROM messages;
+-- +-----------------------+---------------------+
+-- | content               | updated_at          |
+-- +-----------------------+---------------------+
+-- | updated first message | 2019-05-01 08:27:24 |
+-- | second message        | 2019-05-01 08:26:33 |
+-- +-----------------------+---------------------+
+-- 2 rows in set (0.00 sec)
+
+```
+Notice that the first message updated_at value has now changed.
+
+```SQL
+UPDATE messages SET content='updated AGAIN' WHERE content='updated first message';
+
+SELECT * FROM messages;
+-- +----------------+---------------------+
+-- | content        | updated_at          |
+-- +----------------+---------------------+
+-- | updated AGAIN  | 2019-05-01 08:31:15 |
+-- | second message | 2019-05-01 08:26:33 |
+-- +----------------+---------------------+
 -- 2 rows in set (0.00 sec)
 ```
