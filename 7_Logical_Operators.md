@@ -169,3 +169,39 @@ SELECT * FROM books WHERE author_lname='Eggers' AND released_year > 2010 && titl
 -- +---------+----------------------------------+--------------+--------------+---------------+----------------+-------+
 -- 1 row in set (0.00 sec)
 ```
+
+### Logical OR operator
+
+Similarly to `AND`, Logical `OR` operator allows you to broaden the scope of a query by adding extra acceptable constraints.
+
+
+```SQL
+SELECT field FROM table WHERE one_condition OR another_condition;
+```
+or
+
+```SQL
+SELECT field FROM table WHERE one_condition || another_condition;
+```
+
+```SQL
+SELECT
+  title,
+  author_lname,
+  released_year
+FROM books
+WHERE author_lname='Eggers' || released_year > 2010;
+-- +-------------------------------------------+--------------+---------------+
+-- | title                                     | author_lname | released_year |
+-- +-------------------------------------------+--------------+---------------+
+-- | Norse Mythology                           | Gaiman       |          2016 |
+-- | A Hologram for the King: A Novel          | Eggers       |          2012 |
+-- | The Circle                                | Eggers       |          2013 |
+-- | A Heartbreaking Work of Staggering Genius | Eggers       |          2001 |
+-- | 10% Happier                               | Harris       |          2014 |
+-- | Lincoln In The Bardo                      | Saunders     |          2017 |
+-- +-------------------------------------------+--------------+---------------+
+-- 6 rows in set (0.00 sec)
+```
+
+As you can see the results are broader because acceptable results can have Eggers as the author's last name **or** the released year could be after 2010.
