@@ -128,11 +128,15 @@ You can combine query constraints into one query using `&&` to chain them togeth
 ```SQL
 SELECT field FROM table WHERE some_condition && another_condition
 ```
+or
+```SQL
+SELECT field FROM table WHERE some_condition AND another_condition
+```
 
 - Consider the below query in which you wish to select any books written by Eggers.
 
 ```SQL
-SELECT title, author_lname, released_year FROM books WHERE author_lname='eggers';
+SELECT title, author_lname, released_year FROM books WHERE author_lname='Eggers';
 -- +-------------------------------------------+--------------+---------------+
 -- | title                                     | author_lname | released_year |
 -- +-------------------------------------------+--------------+---------------+
@@ -146,7 +150,7 @@ SELECT title, author_lname, released_year FROM books WHERE author_lname='eggers'
 Notice that the released_years of the results range from 2001 to 2013. If you wanted to select all books written by Eggers **that were also** released after 2010 you could use the logical operator to specify released year:
 
 ```SQL
-SELECT title, author_lname, released_year FROM books WHERE author_lname='eggers' && released_year > 2010;
+SELECT title, author_lname, released_year FROM books WHERE author_lname='Eggers' && released_year > 2010;
 -- +----------------------------------+--------------+---------------+
 -- | title                            | author_lname | released_year |
 -- +----------------------------------+--------------+---------------+
@@ -154,4 +158,14 @@ SELECT title, author_lname, released_year FROM books WHERE author_lname='eggers'
 -- | The Circle                       | Eggers       |          2013 |
 -- +----------------------------------+--------------+---------------+
 -- 2 rows in set (0.00 sec)
+```
+
+```SQL
+SELECT * FROM books WHERE author_lname='Eggers' AND released_year > 2010 && title LIKE '%novel%';
+-- +---------+----------------------------------+--------------+--------------+---------------+----------------+-------+
+-- | book_id | title                            | author_fname | author_lname | released_year | stock_quantity | pages |
+-- +---------+----------------------------------+--------------+--------------+---------------+----------------+-------+
+-- |       5 | A Hologram for the King: A Novel | Dave         | Eggers       |          2012 |            154 |   352 |
+-- +---------+----------------------------------+--------------+--------------+---------------+----------------+-------+
+-- 1 row in set (0.00 sec)
 ```
