@@ -11,3 +11,5 @@
 - [5) Aggregate Functions](https://github.com/edgarfinn/Learning-MySQL/blob/master/5_Agregate_Functions.md)
 
 - [6) Data Types In Depth](https://github.com/edgarfinn/Learning-MySQL/blob/master/6_Data_Types_In_Depth.md)
+
+- [7) Data Types In Depth](https://github.com/edgarfinn/Learning-MySQL/blob/master/7_Logical_Operators.md)
