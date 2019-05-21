@@ -122,3 +122,36 @@ SELECT 99 > 1;
 ```
 
 ### Logical And `&&`
+
+You can combine query constraints into one query using `&&` to chain them together.
+
+```SQL
+SELECT field FROM table WHERE some_condition && another_condition
+```
+
+- Consider the below query in which you wish to select any books written by Eggers.
+
+```SQL
+SELECT title, author_lname, released_year FROM books WHERE author_lname='eggers';
+-- +-------------------------------------------+--------------+---------------+
+-- | title                                     | author_lname | released_year |
+-- +-------------------------------------------+--------------+---------------+
+-- | A Hologram for the King: A Novel          | Eggers       |          2012 |
+-- | The Circle                                | Eggers       |          2013 |
+-- | A Heartbreaking Work of Staggering Genius | Eggers       |          2001 |
+-- +-------------------------------------------+--------------+---------------+
+-- 3 rows in set (0.00 sec)
+
+```
+Notice that the released_years of the results range from 2001 to 2013. If you wanted to select all books written by Eggers **that were also** released after 2010 you could use the logical operator to specify released year:
+
+```SQL
+SELECT title, author_lname, released_year FROM books WHERE author_lname='eggers' && released_year > 2010;
+-- +----------------------------------+--------------+---------------+
+-- | title                            | author_lname | released_year |
+-- +----------------------------------+--------------+---------------+
+-- | A Hologram for the King: A Novel | Eggers       |          2012 |
+-- | The Circle                       | Eggers       |          2013 |
+-- +----------------------------------+--------------+---------------+
+-- 2 rows in set (0.00 sec)
+```
