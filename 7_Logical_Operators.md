@@ -506,3 +506,34 @@ FROM books;
 -- +-----------------------------------------------------+---------------+--------------+
 -- 19 rows in set (0.00 sec)
 ```
+
+NOTE, you can place aggregate functions inside CASE statements, which will then pick up aggregated data from any following GROUP declarations, such as:
+
+```SQL
+SELECT
+    title,
+    author_lname,
+    CASE
+        WHEN COUNT(*) > 1 THEN CONCAT(COUNT(*), ' books')
+        ELSE CONCAT(COUNT(*), ' book')
+    END AS COUNT
+FROM books
+GROUP BY author_fname, author_lname;
+-- +-----------------------------------------------------+----------------+---------+
+-- | title                                               | author_lname   | COUNT   |
+-- +-----------------------------------------------------+----------------+---------+
+-- | 10% Happier                                         | Harris         | 1 book  |
+-- | A Hologram for the King: A Novel                    | Eggers         | 3 books |
+-- | Oblivion: Stories                                   | Foster Wallace | 2 books |
+-- | White Noise                                         | DeLillo        | 1 book  |
+-- | fake_book                                           | Harris         | 1 book  |
+-- | Lincoln In The Bardo                                | Saunders       | 1 book  |
+-- | The Namesake                                        | Lahiri         | 2 books |
+-- | Cannery Row                                         | Steinbeck      | 1 book  |
+-- | The Amazing Adventures of Kavalier & Clay           | Chabon         | 1 book  |
+-- | Norse Mythology                                     | Gaiman         | 3 books |
+-- | Just Kids                                           | Smith          | 1 book  |
+-- | What We Talk About When We Talk About Love: Stories | Carver         | 2 books |
+-- +-----------------------------------------------------+----------------+---------+
+-- 12 rows in set (0.00 sec)
+```
