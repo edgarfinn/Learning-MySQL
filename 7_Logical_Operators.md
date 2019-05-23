@@ -422,3 +422,54 @@ SELECT title, released_year FROM books WHERE released_year % 2 = 0;
 -- +-------------------------------------------+---------------+
 -- 7 rows in set (0.00 sec)
 ```
+
+### `CASE`
+
+Returns a new specified value when a certain case is met, and optionally assign that specified value to an identifier:
+
+```SQL
+SELECT field
+  CASE
+    WHEN condition_a THEN condition_a_value
+    WHEN condition_b THEN condition_b_value
+    ELSE a_final_catchall_value
+  END AS value_identifier
+
+FROM table;
+```
+
+For example:
+
+```SQL
+SELECT title, stock_quantity,
+    CASE
+        WHEN stock_quantity BETWEEN 0 AND 50 THEN '*'
+        WHEN stock_quantity BETWEEN 51 AND 100 THEN '**'
+        ELSE '***'
+    END AS STOCK
+FROM books;
+-- +-----------------------------------------------------+----------------+-------+
+-- | title                                               | stock_quantity | STOCK |
+-- +-----------------------------------------------------+----------------+-------+
+-- | The Namesake                                        |             32 | *     |
+-- | Norse Mythology                                     |             43 | *     |
+-- | American Gods                                       |             12 | *     |
+-- | Interpreter of Maladies                             |             97 | **    |
+-- | A Hologram for the King: A Novel                    |            154 | ***   |
+-- | The Circle                                          |             26 | *     |
+-- | The Amazing Adventures of Kavalier & Clay           |             68 | **    |
+-- | Just Kids                                           |             55 | **    |
+-- | A Heartbreaking Work of Staggering Genius           |            104 | ***   |
+-- | Coraline                                            |            100 | **    |
+-- | What We Talk About When We Talk About Love: Stories |             23 | *     |
+-- | Where I'm Calling From: Selected Stories            |             12 | *     |
+-- | White Noise                                         |             49 | *     |
+-- | Cannery Row                                         |             95 | **    |
+-- | Oblivion: Stories                                   |            172 | ***   |
+-- | Consider the Lobster                                |             92 | **    |
+-- | 10% Happier                                         |             29 | *     |
+-- | fake_book                                           |            287 | ***   |
+-- | Lincoln In The Bardo                                |           1000 | ***   |
+-- +-----------------------------------------------------+----------------+-------+
+-- 19 rows in set (0.00 sec)
+```
