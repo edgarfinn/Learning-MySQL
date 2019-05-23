@@ -243,3 +243,181 @@ SELECT title, released_year FROM books WHERE released_year >= 2004 && released_y
 -- +----------------------------------+---------------+
 -- 6 rows in set (0.00 sec)
 ```
+
+### `NOT BETWEEN`
+
+Conversely, `NOT BETWEEN` will return all entries that fall **outside** of a given range:
+
+```SQL
+SELECT title, released_year FROM books WHERE released_year NOT BETWEEN 2004 AND 2015;
+-- +-----------------------------------------------------+---------------+
+-- | title                                               | released_year |
+-- +-----------------------------------------------------+---------------+
+-- | The Namesake                                        |          2003 |
+-- | Norse Mythology                                     |          2016 |
+-- | American Gods                                       |          2001 |
+-- | Interpreter of Maladies                             |          1996 |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |
+-- | Coraline                                            |          2003 |
+-- | What We Talk About When We Talk About Love: Stories |          1981 |
+-- | Where I'm Calling From: Selected Stories            |          1989 |
+-- | White Noise                                         |          1985 |
+-- | Cannery Row                                         |          1945 |
+-- | fake_book                                           |          2001 |
+-- | Lincoln In The Bardo                                |          2017 |
+-- +-----------------------------------------------------+---------------+
+-- 13 rows in set (0.00 sec)
+```
+
+#### A note from mysql documentation:
+
+> For best results when using BETWEEN with date or time values, use [CAST()](https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html#function_cast) to explicitly convert the values to the desired data type. Examples: If you compare a DATETIME to two DATE values, convert the DATE values to DATETIME values. If you use a string constant such as '2001-1-1' in a comparison to a DATE, cast the string to a DATE.
+
+So rather than:
+
+```SQL
+SELECT name, birthdt FROM people WHERE birthdt BETWEEN '1980-01-01' AND '2000-01-01';
+```
+
+....which should work, its safer to convert both of those date strings to `DATETIME` values, to ensure MySQL evaluates them appropriately:
+
+```SQL
+SELECT
+    name,
+    birthdt
+FROM people
+WHERE
+    birthdt BETWEEN CAST('1980-01-01' AS DATETIME)
+    AND CAST('2000-01-01' AS DATETIME);
+```
+
+### `IN`
+
+Checks if a value matches any of a list of values:
+
+`SELECT field FROM table WHERE field IN ('one value', 'another value', 'and another value')`
+
+```SQL
+SELECT title, author_lname FROM books WHERE author_lname IN ('Carver', 'Lahiri', 'Smith');
+-- +-----------------------------------------------------+--------------+
+-- | title                                               | author_lname |
+-- +-----------------------------------------------------+--------------+
+-- | The Namesake                                        | Lahiri       |
+-- | Interpreter of Maladies                             | Lahiri       |
+-- | Just Kids                                           | Smith        |
+-- | What We Talk About When We Talk About Love: Stories | Carver       |
+-- | Where I'm Calling From: Selected Stories            | Carver       |
+-- +-----------------------------------------------------+--------------+
+-- 5 rows in set (0.01 sec)
+```
+
+```SQL
+SELECT title, released_year FROM books WHERE released_year IN (2017, 1985);                        
+-- +----------------------+---------------+
+-- | title                | released_year |
+-- +----------------------+---------------+
+-- | White Noise          |          1985 |
+-- | Lincoln In The Bardo |          2017 |
+-- +----------------------+---------------+
+-- 2 rows in set (0.00 sec)
+```
+
+### `NOT IN`
+Alternatively you can exclude rows from a query using `NOT IN`:
+```SQL
+SELECT title, author_lname FROM books WHERE author_lname NOT IN ('Carver', 'Lahiri', 'Smith');
+-- +-------------------------------------------+----------------+
+-- | title                                     | author_lname   |
+-- +-------------------------------------------+----------------+
+-- | Norse Mythology                           | Gaiman         |
+-- | American Gods                             | Gaiman         |
+-- | A Hologram for the King: A Novel          | Eggers         |
+-- | The Circle                                | Eggers         |
+-- | The Amazing Adventures of Kavalier & Clay | Chabon         |
+-- | A Heartbreaking Work of Staggering Genius | Eggers         |
+-- | Coraline                                  | Gaiman         |
+-- | White Noise                               | DeLillo        |
+-- | Cannery Row                               | Steinbeck      |
+-- | Oblivion: Stories                         | Foster Wallace |
+-- | Consider the Lobster                      | Foster Wallace |
+-- | 10% Happier                               | Harris         |
+-- | fake_book                                 | Harris         |
+-- | Lincoln In The Bardo                      | Saunders       |
+-- +-------------------------------------------+----------------+
+-- 14 rows in set (0.00 sec)
+```
+```SQL
+SELECT title, released_year FROM books WHERE released_year NOT IN (2017, 1985);
+-- +-----------------------------------------------------+---------------+
+-- | title                                               | released_year |
+-- +-----------------------------------------------------+---------------+
+-- | The Namesake                                        |          2003 |
+-- | Norse Mythology                                     |          2016 |
+-- | American Gods                                       |          2001 |
+-- | Interpreter of Maladies                             |          1996 |
+-- | A Hologram for the King: A Novel                    |          2012 |
+-- | The Circle                                          |          2013 |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 |
+-- | Just Kids                                           |          2010 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |
+-- | Coraline                                            |          2003 |
+-- | What We Talk About When We Talk About Love: Stories |          1981 |
+-- | Where I'm Calling From: Selected Stories            |          1989 |
+-- | Cannery Row                                         |          1945 |
+-- | Oblivion: Stories                                   |          2004 |
+-- | Consider the Lobster                                |          2005 |
+-- | 10% Happier                                         |          2014 |
+-- | fake_book                                           |          2001 |
+-- +-----------------------------------------------------+---------------+
+-- 17 rows in set (0.00 sec)
+```
+
+### Modulo (`%`)
+
+The Modulo operator returns the remainder of the division of one number by another.
+for example:
+```SQL
+5 % 2
+-- would return 1, because 2 fits in 5 twice with a remainder of 1.
+```
+
+As such you can use the modulo operator to identify odd or even numbers:
+
+Find books released on an odd-numbered year:
+```SQL
+SELECT title, released_year FROM books WHERE released_year % 2 != 0;
+-- +-----------------------------------------------------+---------------+
+-- | title                                               | released_year |
+-- +-----------------------------------------------------+---------------+
+-- | The Namesake                                        |          2003 |
+-- | American Gods                                       |          2001 |
+-- | The Circle                                          |          2013 |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 |
+-- | Coraline                                            |          2003 |
+-- | What We Talk About When We Talk About Love: Stories |          1981 |
+-- | Where I'm Calling From: Selected Stories            |          1989 |
+-- | White Noise                                         |          1985 |
+-- | Cannery Row                                         |          1945 |
+-- | Consider the Lobster                                |          2005 |
+-- | fake_book                                           |          2001 |
+-- | Lincoln In The Bardo                                |          2017 |
+-- +-----------------------------------------------------+---------------+
+-- 12 rows in set (0.00 sec)
+```
+Find books released on an even-numbered year:
+```SQL
+SELECT title, released_year FROM books WHERE released_year % 2 = 0;
+-- +-------------------------------------------+---------------+
+-- | title                                     | released_year |
+-- +-------------------------------------------+---------------+
+-- | Norse Mythology                           |          2016 |
+-- | Interpreter of Maladies                   |          1996 |
+-- | A Hologram for the King: A Novel          |          2012 |
+-- | The Amazing Adventures of Kavalier & Clay |          2000 |
+-- | Just Kids                                 |          2010 |
+-- | Oblivion: Stories                         |          2004 |
+-- | 10% Happier                               |          2014 |
+-- +-------------------------------------------+---------------+
+-- 7 rows in set (0.00 sec)
+```
