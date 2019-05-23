@@ -205,3 +205,41 @@ WHERE author_lname='Eggers' || released_year > 2010;
 ```
 
 As you can see the results are broader because acceptable results can have Eggers as the author's last name **or** the released year could be after 2010.
+
+### `BETWEEN`
+
+Allows you to set a range of values between which you with to target:
+
+SELECT field FROM table WHERE field BETWEEN one_value AND another_value;
+
+```SQL
+SELECT title, released_year FROM books WHERE released_year BETWEEN 2004 AND 2015;
+-- +----------------------------------+---------------+
+-- | title                            | released_year |
+-- +----------------------------------+---------------+
+-- | A Hologram for the King: A Novel |          2012 |
+-- | The Circle                       |          2013 |
+-- | Just Kids                        |          2010 |
+-- | Oblivion: Stories                |          2004 |
+-- | Consider the Lobster             |          2005 |
+-- | 10% Happier                      |          2014 |
+-- +----------------------------------+---------------+
+-- 6 rows in set (0.00 sec)
+```
+
+Essentially does the same as:
+
+```SQL
+SELECT title, released_year FROM books WHERE released_year >= 2004 && released_year <= 2015;
+-- +----------------------------------+---------------+
+-- | title                            | released_year |
+-- +----------------------------------+---------------+
+-- | A Hologram for the King: A Novel |          2012 |
+-- | The Circle                       |          2013 |
+-- | Just Kids                        |          2010 |
+-- | Oblivion: Stories                |          2004 |
+-- | Consider the Lobster             |          2005 |
+-- | 10% Happier                      |          2014 |
+-- +----------------------------------+---------------+
+-- 6 rows in set (0.00 sec)
+```
