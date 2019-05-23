@@ -405,7 +405,8 @@ SELECT title, released_year FROM books WHERE released_year % 2 != 0;
 -- +-----------------------------------------------------+---------------+
 -- 12 rows in set (0.00 sec)
 ```
-Find books released on an even-numbered year:
+
+Or find books released on an even-numbered year:
 ```SQL
 SELECT title, released_year FROM books WHERE released_year % 2 = 0;
 -- +-------------------------------------------+---------------+
