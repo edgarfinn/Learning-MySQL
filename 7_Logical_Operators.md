@@ -473,3 +473,36 @@ FROM books;
 -- +-----------------------------------------------------+----------------+-------+
 -- 19 rows in set (0.00 sec)
 ```
+
+```SQL
+SELECT title, released_year,
+    CASE
+        WHEN released_year >= 2000 THEN 'Modern'
+        ELSE '20th Century'
+    END AS 'Category'
+FROM books;
+-- +-----------------------------------------------------+---------------+--------------+
+-- | title                                               | released_year | Category     |
+-- +-----------------------------------------------------+---------------+--------------+
+-- | The Namesake                                        |          2003 | Modern       |
+-- | Norse Mythology                                     |          2016 | Modern       |
+-- | American Gods                                       |          2001 | Modern       |
+-- | Interpreter of Maladies                             |          1996 | 20th Century |
+-- | A Hologram for the King: A Novel                    |          2012 | Modern       |
+-- | The Circle                                          |          2013 | Modern       |
+-- | The Amazing Adventures of Kavalier & Clay           |          2000 | Modern       |
+-- | Just Kids                                           |          2010 | Modern       |
+-- | A Heartbreaking Work of Staggering Genius           |          2001 | Modern       |
+-- | Coraline                                            |          2003 | Modern       |
+-- | What We Talk About When We Talk About Love: Stories |          1981 | 20th Century |
+-- | Where I'm Calling From: Selected Stories            |          1989 | 20th Century |
+-- | White Noise                                         |          1985 | 20th Century |
+-- | Cannery Row                                         |          1945 | 20th Century |
+-- | Oblivion: Stories                                   |          2004 | Modern       |
+-- | Consider the Lobster                                |          2005 | Modern       |
+-- | 10% Happier                                         |          2014 | Modern       |
+-- | fake_book                                           |          2001 | Modern       |
+-- | Lincoln In The Bardo                                |          2017 | Modern       |
+-- +-----------------------------------------------------+---------------+--------------+
+-- 19 rows in set (0.00 sec)
+```
