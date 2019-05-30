@@ -20,4 +20,19 @@ A table can have only one primary key, which may consist of single or multiple f
 
 If a table has a primary key defined on any field(s), then you cannot have two records having the same value of that field(s).
 
+Refresher on how to [declare a `PRIMARY KEY`](https://github.com/edgarfinn/Learning-MySQL/blob/master/1_Creating_tables_and_inserting_data.md#primary-keys)
+
 ![Primary Keys](./assets/primarykeys.png)
+
+In the above diagram, each table has a primary key, for customers: `customer_id`, for orders, `order_id`. Every entry of each of them is unique, and never null, and can therefore be used to reference the entire entry quickly and easily.
+
+### Foreign keys
+A foreign key is a key used to link two tables together. This is sometimes also called as a referencing key.
+
+A Foreign Key is a column or a combination of columns whose values match a Primary Key in a different table.
+
+The relationship between 2 tables matches the Primary Key in one of the tables with a Foreign Key in the second table.
+
+If a table has a primary key defined on any field(s), then you cannot have two records having the same value of that field(s).
+
+![Foreign Keys](./assets/foreignkeys.png)
