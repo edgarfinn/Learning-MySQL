@@ -55,6 +55,23 @@ CREATE TABLE orders(
 
     FOREIGN KEY(customer_id) REFERENCES customers(id)
 );
+
+-- For the sake of illustration, the below will be inserted into these tables:
+
+-- INSERT INTO customers (first_name, last_name, email)
+-- VALUES ('Boy', 'George', 'george@gmail.com'),
+--        ('George', 'Michael', 'gm@gmail.com'),
+--        ('David', 'Bowie', 'david@gmail.com'),
+--        ('Blue', 'Steele', 'blue@gmail.com'),
+--        ('Bette', 'Davis', 'bette@aol.com');
+--
+--
+-- INSERT INTO orders (order_date, amount, customer_id)
+-- VALUES ('2016/02/10', 99.99, 1),
+--        ('2017/11/11', 35.50, 1),
+--        ('2014/12/12', 800.67, 2),
+--        ('2015/01/03', 12.50, 2),
+--        ('1999/04/11', 450.25, 5);
 ```
 
 One big benefit of the Foreign Key constraint is that it will return an error if you attempt to insert data that doesn't match the foreign table its meant to be referencing. For example above, it would not let you insert an order if the customer_id did not exist in the customers table.
@@ -75,3 +92,100 @@ The inner query is evaluated first, and its result is passed to the outer query 
 SELECT * FROM orders WHERE customer_id =
     1;
 ```
+
+### Joins
+
+[W3 definition of joins](https://www.w3schools.com/sql/sql_join.asp):
+> A JOIN clause is used to combine rows from two or more tables, based on a related column between them
+
+A basic example of a join could be that you want to see a list of customers (names) with information the orders they've placed (order date and amount). The customers' names need to be pulled from the customers table, whilst the order information needs to be drawn from the orders table.
+
+```SQL
+SELECT first_name, last_name, order_date, amount
+    FROM customers, orders
+        WHERE customers.id = orders.customer_id;
+-- +------------+-----------+------------+--------+
+-- | first_name | last_name | order_date | amount |
+-- +------------+-----------+------------+--------+
+-- | Boy        | George    | 2016-02-10 |  99.99 |
+-- | Boy        | George    | 2017-11-11 |  35.50 |
+-- | George     | Michael   | 2014-12-12 | 800.67 |
+-- | George     | Michael   | 2015-01-03 |  12.50 |
+-- | Bette      | Davis     | 1999-04-11 | 450.25 |
+-- +------------+-----------+------------+--------+
+-- 5 rows in set (0.00 sec)
+```
+
+Notice that:
+  - a) The SELECT criteria is calling on data from both the `customers` and `orders` tables.
+  - b) You're selecting *from* multiple tables.
+  - c) You're limiting the search to only fields where `orders.customer_id` matches `customers.id`
+
+The above example is old syntax, and is an implicit join (the join is _implied_ by the cross-table WHERE constraint.)
+
+A modern, more favoured, explicit way to query the exact same info would be to use the `JOIN` keyword:
+```SQL
+SELECT first_name, last_name, order_date, amount
+    FROM customers
+    JOIN orders
+        ON customers.id = orders.customer_id;
+-- +------------+-----------+------------+--------+
+-- | first_name | last_name | order_date | amount |
+-- +------------+-----------+------------+--------+
+-- | Boy        | George    | 2016-02-10 |  99.99 |
+-- | Boy        | George    | 2017-11-11 |  35.50 |
+-- | George     | Michael   | 2014-12-12 | 800.67 |
+-- | George     | Michael   | 2015-01-03 |  12.50 |
+-- | Bette      | Davis     | 1999-04-11 | 450.25 |
+-- +------------+-----------+------------+--------+
+-- 5 rows in set (0.00 sec)
+```
+
+This is exactly the same as the previous query.
+
+### Inner Joins vs Left Joins
+
+The above examples are inner joins, because they are only taking parts of the data from each table, (generally the most common type of join).
+
+Sometimes you might still want to select everything from one table, and only come from another, which is where Left and Right joins come in. One example might be where you wanted to list the total amount spent by every customer. Bearing in mind not all customers have placed orders, you might still want these people listed as having spent nothing (£0).
+
+```sql
+SELECT first_name, last_name, amount FROM customers LEFT JOIN orders ON customers.id = orders.customer_id;
+-- +------------+-----------+--------+
+-- | first_name | last_name | amount |
+-- +------------+-----------+--------+
+-- | Boy        | George    |  99.99 |
+-- | Boy        | George    |  35.50 |
+-- | George     | Michael   | 800.67 |
+-- | George     | Michael   |  12.50 |
+-- | David      | Bowie     |   NULL |
+-- | Blue       | Steele    |   NULL |
+-- | Bette      | Davis     | 450.25 |
+-- +------------+-----------+--------+
+-- 7 rows in set (0.00 sec)
+```
+
+This lists all customers' names from the customers table, plus order amounts form the orders table (where they've been joined to match orders' customer ids to the right customers), then to flatten this into totals per customer, you could use aggregate functions with group by like so:
+
+```sql
+SELECT
+    first_name,
+    last_name,
+    IFNULL(SUM(amount), 0) AS total_spent
+FROM customers
+LEFT JOIN orders
+    ON customers.id = orders.customer_id
+GROUP BY customers.id;
+-- +------------+-----------+-------------+
+-- | first_name | last_name | total_spent |
+-- +------------+-----------+-------------+
+-- | Boy        | George    |      135.49 |
+-- | George     | Michael   |      813.17 |
+-- | David      | Bowie     |        0.00 |
+-- | Blue       | Steele    |        0.00 |
+-- | Bette      | Davis     |      450.25 |
+-- +------------+-----------+-------------+
+-- 5 rows in set (0.00 sec)
+```
+
+(Note: [Read about `IFNULL` here](https://www.w3schools.com/sql/func_mysql_ifnull.asp))
