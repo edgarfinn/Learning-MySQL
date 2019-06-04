@@ -52,7 +52,26 @@ CREATE TABLE orders(
     order_date DATE,
     amount DECIMAL(8,2),
     customer_id INT,
-    
+
     FOREIGN KEY(customer_id) REFERENCES customers(id)
 );
+```
+
+One big benefit of the Foreign Key constraint is that it will return an error if you attempt to insert data that doesn't match the foreign table its meant to be referencing. For example above, it would not let you insert an order if the customer_id did not exist in the customers table.
+
+### Sub-Queries
+
+```SQL
+SELECT * FROM orders WHERE customer_id =
+    (
+        SELECT id FROM customers
+        WHERE last_name='George'
+    );
+```
+
+The inner query is evaluated first, and its result is passed to the outer query in place of the code between the parentheses. So in this example, whereby Boy George is customer id 1, its the same as:
+
+```SQL
+SELECT * FROM orders WHERE customer_id =
+    1;
 ```
