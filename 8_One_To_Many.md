@@ -143,7 +143,7 @@ SELECT first_name, last_name, order_date, amount
 
 This is exactly the same as the previous query.
 
-### Inner Joins vs Left Joins
+### Inner Joins vs Left Joins / Right Joins
 
 The above examples are inner joins, because they are only taking parts of the data from each table, (generally the most common type of join).
 
@@ -189,3 +189,30 @@ GROUP BY customers.id;
 ```
 
 (Note: [Read about `IFNULL` here](https://www.w3schools.com/sql/func_mysql_ifnull.asp))
+
+(With the above tables, a right join would just show us the same as an inner join because there are no orders that do not have corresponding `customer_id`s, but essentially RIGHT JOIN works in the same way as a LEFT JOIN, just in reverse.)
+
+### `ON DELETE CASCADE`
+
+Due to the foreign key constraint between `orders.customer_id` and `customers.id`, MYSQL wont allow you to delete a customer that has orders attached to it, so as to preserve the integrity of both tables.
+
+```sql
+DELETE FROM customers WHERE last_name = 'Michael';
+
+-- ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`customer_orders`.`orders`, CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`))
+```
+Any related order records would need to be deleted first before George Michaels record could be deleted.
+
+But if you were certain that whenever a customer were deleted, their orders should all be deleted too, you _could_ tell MYSQL to delete any such related records by adding `ON DELETE CASCADE` to the foreign key constraint like so:
+
+```sql
+CREATE TABLE orders(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    amount DECIMAL(8,2),
+    customer_id INT,
+
+    FOREIGN KEY(customer_id) REFERENCES customers(id),
+    ON DELETE CASCADE    
+);
+```
