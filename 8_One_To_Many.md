@@ -192,6 +192,42 @@ GROUP BY customers.id;
 
 (With the above tables, a right join would just show us the same as an inner join because there are no orders that do not have corresponding `customer_id`s, but essentially RIGHT JOIN works in the same way as a LEFT JOIN, just in reverse.)
 
+```sql
+SELECT * FROM customers
+  LEFT JOIN orders
+    ON customers.id = orders.customer_id;
+-- +----+------------+-----------+------------------+------+------------+--------+-------------+
+-- | id | first_name | last_name | email            | id   | order_date | amount | customer_id |
+-- +----+------------+-----------+------------------+------+------------+--------+-------------+
+-- |  1 | Boy        | George    | george@gmail.com |    1 | 2016-02-10 |  99.99 |           1 |
+-- |  1 | Boy        | George    | george@gmail.com |    2 | 2017-11-11 |  35.50 |           1 |
+-- |  2 | George     | Michael   | gm@gmail.com     |    3 | 2014-12-12 | 800.67 |           2 |
+-- |  2 | George     | Michael   | gm@gmail.com     |    4 | 2015-01-03 |  12.50 |           2 |
+-- |  4 | Blue       | Steele    | blue@gmail.com   | NULL | NULL       |   NULL |        NULL |
+-- |  5 | Bette      | Davis     | bette@aol.com    |    5 | 1999-04-11 | 450.25 |           5 |
+-- |  6 | David      | Bowie     | david@gmail.com  | NULL | NULL       |   NULL |        NULL |
+-- +----+------------+-----------+------------------+------+------------+--------+-------------+
+-- 7 rows in set (0.00 sec)
+
+-- IS EXACTLY THE SAME DATA (JUST ORDERED DIFFERENTLY TO FROM LEFT TO RIGHT):
+
+SELECT * FROM orders
+  RIGHT JOIN customers
+    ON customers.id = orders.customer_id;
+-- +------+------------+--------+-------------+----+------------+-----------+------------------+
+-- | id   | order_date | amount | customer_id | id | first_name | last_name | email            |
+-- +------+------------+--------+-------------+----+------------+-----------+------------------+
+-- |    1 | 2016-02-10 |  99.99 |           1 |  1 | Boy        | George    | george@gmail.com |
+-- |    2 | 2017-11-11 |  35.50 |           1 |  1 | Boy        | George    | george@gmail.com |
+-- |    3 | 2014-12-12 | 800.67 |           2 |  2 | George     | Michael   | gm@gmail.com     |
+-- |    4 | 2015-01-03 |  12.50 |           2 |  2 | George     | Michael   | gm@gmail.com     |
+-- | NULL | NULL       |   NULL |        NULL |  4 | Blue       | Steele    | blue@gmail.com   |
+-- |    5 | 1999-04-11 | 450.25 |           5 |  5 | Bette      | Davis     | bette@aol.com    |
+-- | NULL | NULL       |   NULL |        NULL |  6 | David      | Bowie     | david@gmail.com  |
+-- +------+------------+--------+-------------+----+------------+-----------+------------------+
+-- 7 rows in set (0.00 sec)
+```
+
 ### `ON DELETE CASCADE`
 
 Due to the foreign key constraint between `orders.customer_id` and `customers.id`, MYSQL wont allow you to delete a customer that has orders attached to it, so as to preserve the integrity of both tables.
