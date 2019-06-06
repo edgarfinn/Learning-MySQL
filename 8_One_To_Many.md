@@ -213,6 +213,6 @@ CREATE TABLE orders(
     customer_id INT,
 
     FOREIGN KEY(customer_id) REFERENCES customers(id),
-    ON DELETE CASCADE    
+    ON DELETE CASCADE
 );
 ```
