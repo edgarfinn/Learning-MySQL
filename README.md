@@ -15,3 +15,5 @@
 - [7) Data Types In Depth](https://github.com/edgarfinn/Learning-MySQL/blob/master/7_Logical_Operators.md)
 
 - [8) One To Many](https://github.com/edgarfinn/Learning-MySQL/blob/master/8_One_To_Many.md)
+
+- [9) Many To Many](https://github.com/edgarfinn/Learning-MySQL/blob/master/9_Many_To_Many.md)
