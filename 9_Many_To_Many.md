@@ -110,7 +110,7 @@ SELECT * FROM series;
 -- +----+-----------------------+---------------+-----------+
 -- |  1 | Archer                |          2009 | Animation |
 -- |  2 | Arrested Development  |          2003 | Comedy    |
--- |  3 | Bobs Burgers          |          2011 | Animation |
+-- |  3 | Bob's Burgers         |          2011 | Animation |
 -- |  4 | Bojack Horseman       |          2014 | Animation |
 -- |  5 | Breaking Bad          |          2008 | Drama     |
 -- |  6 | Curb Your Enthusiasm  |          2000 | Comedy    |
@@ -178,4 +178,62 @@ SELECT * FROM reviews;
 -- | 47 |    8.9 |        14 |           4 |
 -- +----+--------+-----------+-------------+
 -- 47 rows in set (0.01 sec)
+```
+(Note: not all series have been reviewed.)
+
+### Joining the tables
+
+Say you wanted to find the average rating for each series. First, you would need to be able to link all series with their reviews.
+
+A basic join query to combine reviews and series could look something like this:
+
+```SQL
+SELECT
+    title,
+    rating
+FROM series
+JOIN reviews
+    ON series.id = reviews.series_id;
+
+-- +----------------------+--------+
+-- | title                | rating |
+-- +----------------------+--------+
+-- | Archer               |    8.0 |
+-- | Archer               |    7.5 |
+-- | Archer               |    8.5 |
+-- | Archer               |    7.7 |
+-- | Archer               |    8.9 |
+-- | Arrested Development |    8.1 |
+-- | Arrested Development |    6.0 |
+-- | Arrested Development |    8.0 |
+```
+
+Then all that is needed is to `GROUP` the series', and calculate the `AVG` rating, which could be done with:
+
+```SQL
+SELECT
+    title,
+    AVG(rating) as avg_rating
+FROM series
+JOIN reviews
+    ON series.id = reviews.series_id
+GROUP BY series.id
+ORDER BY avg_rating ASC;
+-- +----------------------+------------+
+-- | title                | avg_rating |
+-- +----------------------+------------+
+-- | General Hospital     |    5.38000 |
+-- | Bob's Burgers        |    7.52000 |
+-- | Seinfeld             |    7.60000 |
+-- | Bojack Horseman      |    7.94000 |
+-- | Arrested Development |    8.08000 |
+-- | Archer               |    8.12000 |
+-- | Curb Your Enthusiasm |    8.12000 |
+-- | Freaks and Geeks     |    8.60000 |
+-- | Stranger Things      |    8.76667 |
+-- | Breaking Bad         |    9.36000 |
+-- | Fargo                |    9.40000 |
+-- | Halt and Catch Fire  |    9.90000 |
+-- +----------------------+------------+
+-- 12 rows in set (0.01 sec)
 ```
