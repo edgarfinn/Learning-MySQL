@@ -214,3 +214,80 @@ FROM reviews
 JOIN reviewers
     ON reviewers.id = reviews.reviewer_id;
 ```
+
+So far, all queries have ignored any TV series that might not have been reviewed, because - so far - they all INNER JOIN where the `reviews.series_id` or `reviews.reviewer_id` match with one of the other tables, so anything without a review just wouldnt show on the search.
+
+This is where LEFT and RIGHT joins can become useful.
+
+To find all series that haven't been reviewed at all, you would need to use a LEFT or RIGHT JOIN so as to include all shows in the `series` regardless of whether they had a review:
+
+```SQL
+SELECT title, rating FROM series
+  LEFT JOIN reviews
+  ON series.id = reviews.series_id;
+-- +-----------------------+--------+
+-- | title                 | rating |
+-- +-----------------------+--------+
+-- | Archer                |    8.0 |
+-- | Archer                |    7.5 |
+-- | Archer                |    8.5 |
+-- | Archer                |    7.7 |
+-- | Archer                |    8.9 |
+-- | Arrested Development  |    8.1 |
+-- | Arrested Development  |    6.0 |
+-- | Arrested Development  |    8.0 |
+-- | Arrested Development  |    8.4 |
+-- | Arrested Development  |    9.9 |
+-- | Bob's Burgers         |    7.0 |
+-- | Bob's Burgers         |    7.5 |
+-- | Bob's Burgers         |    8.0 |
+-- | Bob's Burgers         |    7.1 |
+-- | Bob's Burgers         |    8.0 |
+-- | Bojack Horseman       |    7.5 |
+-- | Bojack Horseman       |    7.8 |
+-- | Bojack Horseman       |    8.3 |
+-- | Bojack Horseman       |    7.6 |
+-- | Bojack Horseman       |    8.5 |
+-- | Breaking Bad          |    9.5 |
+-- | Breaking Bad          |    9.0 |
+-- | Breaking Bad          |    9.1 |
+-- | Breaking Bad          |    9.3 |
+-- | Breaking Bad          |    9.9 |
+-- | Curb Your Enthusiasm  |    6.5 |
+-- | Curb Your Enthusiasm  |    7.8 |
+-- | Curb Your Enthusiasm  |    8.8 |
+-- | Curb Your Enthusiasm  |    8.4 |
+-- | Curb Your Enthusiasm  |    9.1 |
+-- | Fargo                 |    9.1 |
+-- | Fargo                 |    9.7 |
+-- | Freaks and Geeks      |    8.5 |
+-- | Freaks and Geeks      |    7.8 |
+-- | Freaks and Geeks      |    8.8 |
+-- | Freaks and Geeks      |    9.3 |
+-- | General Hospital      |    5.5 |
+-- | General Hospital      |    6.8 |
+-- | General Hospital      |    5.8 |
+-- | General Hospital      |    4.3 |
+-- | General Hospital      |    4.5 |
+-- | Halt and Catch Fire   |    9.9 |
+-- | Malcolm In The Middle |   NULL |
+-- | Pushing Daisies       |   NULL |
+-- | Seinfeld              |    8.0 |
+-- | Seinfeld              |    7.2 |
+-- | Stranger Things       |    8.5 |
+-- | Stranger Things       |    8.9 |
+-- | Stranger Things       |    8.9 |
+-- +-----------------------+--------+
+-- 49 rows in set (0.00 sec)
+```
+
+Or, if *all* you wanted were the un-reviewed series, you could filter them out with:
+
+```SQL
+SELECT title, rating FROM series
+  LEFT JOIN reviews
+  ON series.id = reviews.series_id
+WHERE rating IS NULL;
+```
+
+*WARNING:* you might think that the WHERE constraint could be expressed as `WHERE rating = NULL`, but that would imply that a rating had been entered (with the value of `NULL`) for that series, instead `IS NULL` looks for results where there is no entry at all.
