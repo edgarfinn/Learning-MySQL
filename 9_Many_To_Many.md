@@ -215,6 +215,8 @@ JOIN reviewers
     ON reviewers.id = reviews.reviewer_id;
 ```
 
+### Finding series that have no reviews yet
+
 So far, all queries have ignored any TV series that might not have been reviewed, because - so far - they all INNER JOIN where the `reviews.series_id` or `reviews.reviewer_id` match with one of the other tables, so anything without a review just wouldnt show on the search.
 
 This is where LEFT and RIGHT joins can become useful.
@@ -288,6 +290,60 @@ SELECT title, rating FROM series
   LEFT JOIN reviews
   ON series.id = reviews.series_id
 WHERE rating IS NULL;
+-- +-----------------------+--------+
+-- | title                 | rating |
+-- +-----------------------+--------+
+-- | Malcolm In The Middle |   NULL |
+-- | Pushing Daisies       |   NULL |
+-- +-----------------------+--------+
+-- 2 rows in set (0.00 sec)
 ```
 
-*WARNING:* you might think that the WHERE constraint could be expressed as `WHERE rating = NULL`, but that would imply that a rating had been entered (with the value of `NULL`) for that series, instead `IS NULL` looks for results where there is no entry at all.
+*WARNING:* you might be tempted to express the WHERE constraint using `WHERE rating = NULL`, but this would imply that a rating had been entered (with the value of `NULL`) for that series (and would therefore yield no results at all). Instead `IS NULL` looks for results where there is no rating entry at all for that series.
+
+
+### Finding the average rating for each genre.
+
+This is a fairly straight forward job for an INNER JOIN, we only want series that have ratings, so we dont need to
+LEFT or RIGHT join.
+
+```SQL
+SELECT
+  genre,
+  AVG(rating) AS avgRating
+  FROM series
+INNER JOIN reviews
+ON series.id = reviews.series_id
+GROUP BY genre;
+-- +-----------+-----------+
+-- | genre     | avgRating |
+-- +-----------+-----------+
+-- | Animation |   7.86000 |
+-- | Comedy    |   8.16250 |
+-- | Drama     |   8.04375 |
+-- +-----------+-----------+
+-- 3 rows in set (0.00 sec)
+```
+
+OR, to make the averages more succinct, you could use the [`ROUND()`](http://www.mysqltutorial.org/mysql-math-functions/mysql-round/) function:
+
+```SQL
+SELECT
+    genre,
+    ROUND(
+        AVG(rating),
+        1
+    ) AS avgRating
+    FROM series
+INNER JOIN reviews
+ON series.id = reviews.series_id
+GROUP BY genre;
+-- +-----------+-----------+
+-- | genre     | avgRating |
+-- +-----------+-----------+
+-- | Animation |       7.9 |
+-- | Comedy    |       8.2 |
+-- | Drama     |       8.0 |
+-- +-----------+-----------+
+-- 3 rows in set (0.00 sec)
+```
