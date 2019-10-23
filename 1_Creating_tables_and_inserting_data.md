@@ -3,43 +3,60 @@
 ### Cloud9 Specific
 Start a new instance of MySQL which runs in the background.
 
-```mysql-ctl start```
+```bash
+mysql
+# or if password protected:
+mysql -u [user_name] -p
+# followed by your password when prompted
+```
 
 Stop the existing instance of MySQL running.
 
-```mysql-ctl stop```
-
-Start the CLI:
-
-```mysql-ctl cli;```
+```bash
+exit;
+```
 
 ### Creating a database.
 List available databases:
 
-```show databases;```
+```sql
+SHOW DATABASES;
+```
 
 The general command for creating a database
 
-```CREATE DATABASE database_name;```
+```sql
+CREATE DATABASE database_name;
+```
 (can be all lower case but capitals for commands is convention to differentiate commands from values)
 
 A specific example:
 
-```CREATE DATABASE soap_store;```
+```sql
+CREATE DATABASE soap_store;
+```
 
 Delete a database:
 
-```DROP DATABASE database_name;```
+```sql
+DROP DATABASE database_name;
+```
 
 eg:
-```DROP DATABASE soap_store;```
+```sql
+DROP DATABASE soap_store;
+```
 
 
 Tell MySQL which database which database to work with.
-```USE database_name;```
+```sql
+USE database_name;
+```
 
 example:
-```USE dog_walking_app;```
+```sql
+USE dog_walking_app;
+```
 
 Return the current database in use:
 
