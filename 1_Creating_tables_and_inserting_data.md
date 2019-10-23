@@ -48,19 +48,29 @@ DROP DATABASE soap_store;
 ```
 
 
-Tell MySQL which database which database to work with.
+Tell MySQL which database to work with.
 ```sql
 USE database_name;
+```
+Alternatively you can specify the table in each request using dot notation:
+
+```SQL
+SELECT * FROM database_name.table_name;
 ```
 
 example:
 ```sql
 USE dog_walking_app;
+SELECT * FROM DogNames;
+-- or using dot notation
+SELECT * FROM dog_walking_app.DogNames;
 ```
 
 Return the current database in use:
 
-```SELECT database();```
+```sql
+SELECT database();
+```
 
 ### Tables
 A MySQL database is essentially a collection of Tables.
@@ -148,18 +158,18 @@ VALUES      ( "Jetson",
               5 );
 ```
 
-You can insert multiple rows of data in one command by chaining values in parens and separating them by commas:
+You can insert multiple rows of data in one command by chaining values in parentheses and separating them by commas:
 
 ```SQL
 
 INSERT INTO table_name
-            (column_name, column_name)
-VALUES      (value, value),
-            (value, value),
-            (value, value);
+            (column_a, column_b)
+VALUES      (value_a, value_b),
+            (value_a, value_b),
+            (value_a, value_b);
 ```
 
-##### Escaping quotation marks in commands:
+#### Escaping quotation marks in commands:
 
 Either:
 
@@ -339,7 +349,9 @@ $> SELECT * FROM cats4;
 1 row in set (0.00 sec)
 
 $> INSERT INTO cats4 (name, age) VALUES (null, null);
-ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'VALES (null, null)' at line 1
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that
+corresponds to your MySQL server version for the right syntax to use near
+'VALES (null, null)' at line 1
 
 ```
 
@@ -384,7 +396,7 @@ $> DESC unique_cats;
 
 Notice the key column now tells you that the `cat_id` field is the primary key (`PRI`).
 
-This table will not accept any two entries where the `cat_id` hold the same value, because they must be unique.
+This table will not accept any two entries where the `cat_id` columns hold the same value, because they must be unique.
 
 ```sql
 $> INSERT INTO unique_cats(cat_id, name, age) VALUES (1, 'sid', 3);                                                                  
@@ -394,7 +406,7 @@ $> INSERT INTO unique_cats(cat_id, name, age) VALUES (1, 'dave', 2);
 ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
 $>
 ```
-because the cat_id are the same in both inserts, the second insert has returned an error, and not executed.
+So, because the cat_id fields are the same in both inserts, the second insert has returned an error, and not executed.
 
 #### Auto-incrementing:
 
