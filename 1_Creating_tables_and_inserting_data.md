@@ -1,6 +1,6 @@
 # Learning-MySQL
 
-### Cloud9 Specific
+### Start MySQL Server
 Start a new instance of MySQL which runs in the background.
 
 ```bash
